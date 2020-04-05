@@ -5,7 +5,7 @@
 
     <groupId>com.muggle</groupId>
     <artifactId>poseidon-boot-starter</artifactId>
-    <version>0.0.1-BUILD</version>
+    <version>0.0.1.Alpha</version>
     <name>poseidon-cloud-starter</name>
     <description>poseidon 项目starter 包</description>
 
