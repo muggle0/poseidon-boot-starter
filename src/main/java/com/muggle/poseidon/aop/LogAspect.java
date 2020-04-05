@@ -1,8 +1,9 @@
 package com.muggle.poseidon.aop;
 
 import com.muggle.poseidon.annotation.InterfaceAction;
-import com.muggle.poseidon.base.PoseidonLocker;
+import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
+import com.muggle.poseidon.util.RequestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
@@ -28,9 +29,9 @@ import java.util.Enumeration;
  */
 @Aspect
 public class LogAspect {
-    private PoseidonLocker locker;
+    private DistributedLocker locker;
 
-    public LogAspect (PoseidonLocker locker){
+    public LogAspect (DistributedLocker locker){
         this.locker=locker;
     }
     private static final Log log = LogFactory.getLog(LogAspect.class);
@@ -74,13 +75,16 @@ public class LogAspect {
     private void verifyIdempotent(JoinPoint joinPoint) {
         InterfaceAction annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(InterfaceAction.class);
         boolean idempotent = annotation.Idempotent();
+        log.debug("幂等操作》》》》》");
         if (idempotent){
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String requestURI = request.getRequestURI();
-            String remoteAddr = request.getRemoteAddr();
+            String remoteAddr = RequestUtils.getIP(request);
+            log.info(String.format("请求进入幂等方法，开始尝试上锁 uri: %s ip:%s",requestURI,remoteAddr));
             long expertime = annotation.expertime();
-            boolean trylock = locker.trylock("[" + requestURI + "]:[" + remoteAddr + "]", expertime);
+            String key = annotation.key();
+            boolean trylock = locker.trylock(key, expertime);
             if (!trylock){
                 String message = annotation.message();
                 throw new SimplePoseidonException(message);

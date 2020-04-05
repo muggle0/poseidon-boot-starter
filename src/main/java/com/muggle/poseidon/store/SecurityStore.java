@@ -35,12 +35,12 @@ public interface SecurityStore {
 
     /**
     * @author muggle
-    * @Description: 清除用户登录信息（登出）,根据key清除版本号
+    * @Description: 清除用户登录信息（登出）
     * @Param:
     * @return:
     * @date 2019/11/5 11:42
     */
-    Boolean cleanToken(String token);
+    Boolean cleanToken(String username);
 
     /**
     * @author muggle

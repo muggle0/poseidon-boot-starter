@@ -2,12 +2,14 @@ package com.muggle.poseidon.service;
 
 import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
 import com.muggle.poseidon.entity.AuthUrlPathDO;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +24,7 @@ public interface TokenService extends UserDetailsService {
     * @return:
     * @date 2019/11/5 18:05
     */
-    boolean rooleMatch(Set<String> rooleCodes, String path);
+    boolean rooleMatch(Collection<? extends GrantedAuthority> authorities, String path);
 
     /**
      * 项目初始化插入权限表

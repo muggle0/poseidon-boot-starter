@@ -68,12 +68,8 @@ public class PoseidonWebExpressionVoter extends WebExpressionVoter {
         }
         /** 获取用户角色，并通过角色去匹配权限*/
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        HashSet<String> roleCodes = new HashSet<>();
-        authorities.forEach(bean -> {
-            String authority = bean.getAuthority();
-            roleCodes.add(authority);
-        });
-        boolean b = tokenService.rooleMatch(roleCodes, requestUrl);
+
+        boolean b = tokenService.rooleMatch(authorities, requestUrl);
         if (b) {
             return ACCESS_GRANTED;
         }

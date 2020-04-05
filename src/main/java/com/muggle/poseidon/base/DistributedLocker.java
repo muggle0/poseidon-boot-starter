@@ -9,7 +9,7 @@ import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
  * @create: 2019-12-31
  **/
 
-public interface PoseidonLocker {
+public interface DistributedLocker {
 
     /**
      * \锁 非阻塞 单位：毫秒

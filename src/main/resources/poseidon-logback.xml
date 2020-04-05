@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <jmxConfigurator/>
+
+    <!--<property name="log_dir" value="log.dir"/>-->
+    <property name="maxHistory" value="100"/>
+    <!--<springProperty scope="context" name="destination" source="logstash.destination"/>-->
+    <springProperty scope="context" name="log_name" source="spring.application.name"/>
+    <springProperty scope="context" name="log_dir" source="log.dir"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                <pattern>
+                    %white(POSEIDON----) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %cyan(%logger) - %msg%n
+                </pattern>
+            </pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="logs" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${log_dir}/%d{yyyy-MM-dd}-${log_name}.log
+            </fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+     <appender name="logs-asyn" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="logs"/>
+    </appender>
+
+    <!--<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+        <!--<destination>${destination}</destination>-->
+        <!--<includeCallerData>true</includeCallerData>-->
+
+        <!--<encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
+            <!--<includeCallerData>true</includeCallerData>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+    <root>
+        <level value="info"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="logs-asyn"/>
+    </root>
+
+</configuration>

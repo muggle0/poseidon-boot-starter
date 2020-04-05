@@ -14,6 +14,7 @@ import java.util.List;
  * @author: muggle
  * @create: 2018-12-06 11:02
  **/
+@Deprecated
 public  class RequestLockInterceptor implements HandlerInterceptor {
 
     private List<RequestLockHelper> helpers;

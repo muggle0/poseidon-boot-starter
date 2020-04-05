@@ -1,6 +1,6 @@
 package com.muggle.poseidon.util;
 
-import com.muggle.poseidon.base.PoseidonLocker;
+import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class SimpleLocker implements PoseidonLocker {
+public class SimpleLocker implements DistributedLocker {
 
     private ConcurrentHashMap<String,CacheBean> lockMap;
 

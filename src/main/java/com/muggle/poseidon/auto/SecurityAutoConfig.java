@@ -3,7 +3,7 @@ package com.muggle.poseidon.auto;
 import com.muggle.poseidon.adapter.PoseidonAuthConfigAdapter;
 import com.muggle.poseidon.aop.DevUserInfoInterceptor;
 import com.muggle.poseidon.aop.LogAspect;
-import com.muggle.poseidon.base.PoseidonLocker;
+import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import com.muggle.poseidon.entity.AuthUrlPathDO;
 import com.muggle.poseidon.service.TokenService;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -146,8 +145,8 @@ public class SecurityAutoConfig {
 
     @Bean
     @Autowired
-    @ConditionalOnBean(PoseidonLocker.class)
-    public LogAspect getLogAspect(PoseidonLocker poseidonLocker){return new LogAspect(poseidonLocker);}
+    @ConditionalOnBean(DistributedLocker.class)
+    public LogAspect getLogAspect(DistributedLocker distributedLocker){return new LogAspect(distributedLocker);}
 
     /**
      * 开发环境，绕过权限拦截器

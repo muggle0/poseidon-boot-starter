@@ -3,9 +3,14 @@ package com.muggle.poseidon.handler;
 import com.muggle.poseidon.base.ResultBean;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.base.exception.BasePoseidonException;
+import com.muggle.poseidon.listener.ExceptionEvent;
+import com.muggle.poseidon.util.UserInfoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 public class WebResultHandler {
 
     private static final Logger log = LoggerFactory.getLogger(WebResultHandler.class);
+
+    @Autowired
+    ApplicationContext applicationContext;
 
 
     /**
@@ -93,15 +101,18 @@ public class WebResultHandler {
 
     /**
      * 未知异常，需要通知到管理员,对于线上未知的异常，我们应该严肃处理：先将消息传给MQ中心(该平台未实现) 然后日志写库
-      * @param e
+     * 这里的处理方式是抛出事件
+     * @param e
      * @param req
      * @return
      */
     @ExceptionHandler(value = {Exception.class})
     public ResultBean exceptionHandler(Exception e, HttpServletRequest req) {
         try {
-            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+ SecurityContextHolder.getContext().getAuthentication().getPrincipal(), e);
-            // todo
+            UserDetails userInfo = UserInfoUtils.getUserInfo();
+            ExceptionEvent exceptionEvent = new ExceptionEvent(String.format("系统异常: [ %s ] 时间戳： [%d]  ", e.getMessage(),System.currentTimeMillis()), this);
+            applicationContext.publishEvent(exceptionEvent);
+            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+userInfo.toString() , e);
             return ResultBean.error("系统异常");
         }catch (Exception err){
             log.error("紧急！！！ 严重的异常",err);
