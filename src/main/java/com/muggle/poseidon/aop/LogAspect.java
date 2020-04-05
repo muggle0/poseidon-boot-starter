@@ -47,25 +47,24 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
         this.verifyIdempotent(joinPoint);
         //参数
-        Enumeration<String> paramter = request.getParameterNames();
+        Object[] args = joinPoint.getArgs();
         StringBuilder stringBuilder = new StringBuilder();
-        while (paramter.hasMoreElements()) {
-            String str = (String) paramter.nextElement();
-            stringBuilder.append(str + ":")
-                    .append(request.getParameter(str) + "; ");
+        for (Object arg : args) {
+            stringBuilder.append(" (").append(arg.toString()).append(") ");
         }
+
         String userMessage = "用户名：%s";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getDetails() == null) {
+        if (authentication == null || authentication.getPrincipal() == null) {
             userMessage = String.format(userMessage, "用户未登陆");
         } else {
-            userMessage = String.format(userMessage, ((UserDetails) authentication.getDetails()).getUsername());
+            userMessage = String.format(userMessage, authentication.getPrincipal().toString());
         }
 
         log.info("》》》》》》 请求日志   "+userMessage+"url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
                 + "host=" + request.getRemoteHost() + "port=" + request.getRemotePort()
                 + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
-                + "paramters=" + stringBuilder.toString());
+                + "paramters [ " + stringBuilder.toString()+" ]");
     }
 
     /**

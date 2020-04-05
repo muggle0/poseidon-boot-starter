@@ -1,7 +1,6 @@
 package com.muggle.poseidon.auto;
 
 import com.muggle.poseidon.adapter.PoseidonAuthConfigAdapter;
-import com.muggle.poseidon.aop.DevUserInfoInterceptor;
 import com.muggle.poseidon.aop.LogAspect;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
@@ -148,13 +147,4 @@ public class SecurityAutoConfig {
     @ConditionalOnBean(DistributedLocker.class)
     public LogAspect getLogAspect(DistributedLocker distributedLocker){return new LogAspect(distributedLocker);}
 
-    /**
-     * 开发环境，绕过权限拦截器
-     */
-
-    @Bean
-    @Profile("notAnyProfile")
-    public DevUserInfoInterceptor devMessage(){
-        return new DevUserInfoInterceptor();
-    }
 }
