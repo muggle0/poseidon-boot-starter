@@ -3,6 +3,7 @@ package com.muggle.poseidon.handler;
 import com.muggle.poseidon.base.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,12 @@ import javax.servlet.http.HttpServletRequest;
  * @create: 2020-03-12 09:54
  */
 @RestController
+@ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
 public class WebUrlHandler implements ErrorController {
+
+    public WebUrlHandler() {
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> WebUrlHandler init <<<<<<<<<<<<<<<<<<<<");
+    }
 
     private static final Logger log = LoggerFactory.getLogger(WebUrlHandler.class);
 
@@ -28,7 +34,7 @@ public class WebUrlHandler implements ErrorController {
 
     @Override
     public String getErrorPath() {
-        return "/error";
+        return "/error_message";
     }
 
 

@@ -60,8 +60,13 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
         try {
             userDetails = securityStore.getUserdetail(token);
         }catch (BasePoseidonCheckException e){
-            log.error("》》》》 用户凭证为badToken",e);
+            log.error("》》》》 用户凭证为badToken {}",e.getMessage());
             SecurityContextHolder.getContext().setAuthentication(getBadToken(e.getMessage()));
+            filterChain.doFilter(httpServletRequest,httpServletResponse);
+            return;
+        }catch (Exception e){
+            log.error("》》》》token 解析异常：",e);
+            SecurityContextHolder.getContext().setAuthentication(getBadToken("请求信息非法，无法解析"));
             filterChain.doFilter(httpServletRequest,httpServletResponse);
             return;
         }

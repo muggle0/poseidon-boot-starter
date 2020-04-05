@@ -8,6 +8,7 @@ import com.muggle.poseidon.util.UserInfoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,12 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
+@ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
 public class WebResultHandler {
+
+    public WebResultHandler() {
+        log.info(">>>>>>>>>>>>>>>>>>>>> WebResultHandler init <<<<<<<<<<<<<<<<<<<<");
+    }
 
     private static final Logger log = LoggerFactory.getLogger(WebResultHandler.class);
 

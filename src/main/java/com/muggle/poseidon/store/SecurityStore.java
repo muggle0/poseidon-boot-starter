@@ -31,7 +31,7 @@ public interface SecurityStore {
      * @return:
      * @date 2019/11/5 11:40
      */
-    String saveUser(UserDetails userDetails, long expirationTime, String key);
+    String signUser(UserDetails userDetails);
 
     /**
     * @author muggle
@@ -41,25 +41,6 @@ public interface SecurityStore {
     * @date 2019/11/5 11:42
     */
     Boolean cleanToken(String username);
-
-    /**
-    * @author muggle
-    * @Description: 设置用户信息（非登录过期）过期时间 （2020.3.4 废弃）
-    * @Param:
-    * @return:
-    * @date 2019/11/5 11:43
-    */
-    @Deprecated
-    void setExpirationTime(long expirationTime, String token);
-
-    /**
-    * @author muggle
-    * @Description: 对token进行二次处理
-    * @Param:
-    * @return:
-    * @date 2019/11/5 11:43
-    */
-    UserDetails processToken(UserDetails userDetails, String token, Function<UserDetails, UserDetails> function);
 
     /**
     * @author muggle

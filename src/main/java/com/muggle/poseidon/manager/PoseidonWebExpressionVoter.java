@@ -35,7 +35,7 @@ public class PoseidonWebExpressionVoter extends WebExpressionVoter {
 
     private PoseidonSecurityProperties properties;
 
-    public PoseidonWebExpressionVoter(TokenService tokenService,PoseidonSecurityProperties properties) {
+    public PoseidonWebExpressionVoter(TokenService tokenService) {
         this.tokenService = tokenService;
     }
     /**
@@ -50,12 +50,9 @@ public class PoseidonWebExpressionVoter extends WebExpressionVoter {
     public int vote(Authentication authentication, FilterInvocation fi, Collection<ConfigAttribute> attributes) {
         String requestUrl = fi.getRequestUrl();
         log.debug("》》》》 请求进入, url：【"+requestUrl+"】用户名：【"+authentication.getPrincipal()+"】");
-        HashSet<String> accessPaths = new HashSet<>();
-        accessPaths.addAll(properties.getIgnorePath());
-        accessPaths.addAll(SecurityStore.ACCESS_PATHS);
         /** 获取所有放行权限（在adapter中的config 方法配置）*/
         for (String pattern :
-                accessPaths) {
+                SecurityStore.ACCESS_PATHS) {
             boolean match = PATH_MATCHER.match(pattern, requestUrl);
             if (match){
                 return ACCESS_GRANTED;

@@ -13,8 +13,6 @@ import java.util.List;
 
 @ConfigurationProperties(prefix="poseidon")
 public class PoseidonSecurityProperties {
-    /** 凭证，用于校验token 要和鉴权平台的令牌一致**/
-    private String credential;
 
     /** 放行的url **/
     private List<String> ignorePath;
@@ -25,23 +23,5 @@ public class PoseidonSecurityProperties {
 
     public void setIgnorePath(List<String> ignorePath) {
         this.ignorePath = ignorePath;
-    }
-
-    private Long experTime;
-
-    public Long getExperTime() {
-        return experTime;
-    }
-
-    public void setExperTime(Long experTime) {
-        this.experTime = experTime;
-    }
-
-    public String getCredential() {
-        return credential;
-    }
-
-    public void setCredential(String credential) {
-        this.credential = credential;
     }
 }

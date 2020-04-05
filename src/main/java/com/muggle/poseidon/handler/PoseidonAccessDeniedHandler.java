@@ -25,7 +25,7 @@ public class PoseidonAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        log.error("用户沒有权限：",e);
+        log.error("用户沒有权限访问 路径： "+request.getRequestURI());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object details =authentication.getDetails();
 

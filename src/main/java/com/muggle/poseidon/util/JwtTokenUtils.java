@@ -27,8 +27,6 @@ public class JwtTokenUtils {
      * @return
      */
     public static String createToken(Map<String, Object> map, String credential, Long experTime) {
-        UUID uuid = UUID.randomUUID();
-        map.put(SecurityMessageProperties.RANDOM,uuid.toString());
         String compact = Jwts.builder().signWith(SignatureAlgorithm.HS512, credential)
                 .setIssuer(SecurityMessageProperties.ISSUER)
                 .setSubject(SecurityMessageProperties.SUBJECT)

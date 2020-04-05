@@ -8,7 +8,7 @@
     <!--<property name="log_dir" value="log.dir"/>-->
     <property name="maxHistory" value="100"/>
     <!--<springProperty scope="context" name="destination" source="logstash.destination"/>-->
-    <springProperty scope="context" name="log_name" source="spring.application.name"/>
+<!--    <springProperty scope="context" name="log_name" source="spring.application.name"/>-->
     <springProperty scope="context" name="log_dir" source="log.dir"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -25,7 +25,7 @@
     <appender name="logs" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>
-                ${log_dir}/%d{yyyy-MM-dd}-${log_name}.log
+                ${log_dir}/%d{yyyy-MM-dd}-todo.log
             </fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
@@ -40,14 +40,6 @@
         <appender-ref ref="logs"/>
     </appender>
 
-    <!--<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
-        <!--<destination>${destination}</destination>-->
-        <!--<includeCallerData>true</includeCallerData>-->
-
-        <!--<encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
-            <!--<includeCallerData>true</includeCallerData>-->
-        <!--</encoder>-->
-    <!--</appender>-->
     <root>
         <level value="info"/>
         <appender-ref ref="console"/>

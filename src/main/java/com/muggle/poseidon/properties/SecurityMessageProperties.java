@@ -10,11 +10,8 @@ package com.muggle.poseidon.properties;
 public interface SecurityMessageProperties {
     String BAD_TOKEN="BAD_TOKEN";
     String SUBJECT ="POSEIDON_CLAIM";
-    String ISSUER ="POSEIDON-CLOUD";
+    String ISSUER ="security";
     String RANDOM = "RANDOM";
-    String LOGIN_TYPE="loginType";
-    String VERIFICATION="verification";
-    String USER_NAME="username";
     String LOGOUT ="/logout" ;
     String LOGIN_URL = "/sign_in";
 }

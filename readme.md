@@ -18,11 +18,35 @@
 
 ## 快速开始
 
+具体使用案例可参考 [sofia](https://github.com/fighting-v/sofia)
 
+第一步拉取项目 并且使用 maven 安装到本地。
+拉取项目：
+```
+git clone https://github.com/muggle0/poseidon-boot-starter.git
+```
+安装到本地仓库：
+```
+cd poseidon-boot-starter
 
+mvn install
 
+```
+
+第二步
+创建 spring boot工程 并引入依赖：
+
+```xml
+
+ <dependency>
+    <groupId>com.muggle</groupId>
+    <artifactId>poseidon-boot-starter</artifactId>
+    <version>0.0.1.Alpha</version>
+ </dependency>
+```
+第三步开启自动化配置并注册 `tokenService` 和 `securityStore`
+
+```java
+
+```
 ## 备忘录
-
-- 锁机制
-- 权限机制
-- 

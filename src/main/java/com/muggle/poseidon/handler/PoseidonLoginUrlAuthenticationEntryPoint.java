@@ -27,7 +27,7 @@ public class PoseidonLoginUrlAuthenticationEntryPoint extends LoginUrlAuthentica
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.error("用户未登陆: ",authException);
+        log.error(">>>>>>>>>>>>>>>>>>>>> 用户未登陆 <<<<<<<<<<<<<<<<<<<<<<<<<");
         response.setContentType("application/json;charset=UTF-8");
         final PrintWriter writer = response.getWriter();
         writer.write("{\"code\":401,\"message\":\"用户未登录\"}");

@@ -1,11 +1,8 @@
 package com.muggle.poseidon.filter;
 
-import com.muggle.poseidon.auto.PoseidonSecurityProperties;
 import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
-import com.muggle.poseidon.properties.SecurityMessageProperties;
 import com.muggle.poseidon.service.TokenService;
 import com.muggle.poseidon.store.SecurityStore;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -30,20 +27,18 @@ public class SecurityLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private SecurityStore securityStore;
 
-    private PoseidonSecurityProperties properties;
 
     static Logger logger= LoggerFactory.getLogger(SecurityLoginFilter.class);
-    public SecurityLoginFilter(TokenService tokenService, SecurityStore securityStore,PoseidonSecurityProperties properties) {
+    public SecurityLoginFilter(TokenService tokenService, SecurityStore securityStore) {
         this.tokenService = tokenService;
         this.securityStore = securityStore;
-        this.properties=properties;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try{
             UserDetails login = tokenService.login(request, response);
-            String token = securityStore.saveUser(login, properties.getExperTime(), SecurityMessageProperties.USER_NAME+":"+login.getUsername());
+            String token = securityStore.signUser(login);
             return  new UsernamePasswordAuthenticationToken(token, "");
         }catch (SimplePoseidonCheckException e){
             logger.error("登录校验异常：",e);

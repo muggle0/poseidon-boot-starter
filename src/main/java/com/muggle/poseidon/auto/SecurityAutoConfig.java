@@ -17,9 +17,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
@@ -52,9 +56,6 @@ public class SecurityAutoConfig {
 
     @Autowired
     private WebApplicationContext applicationContext;
-
-    @Value("${spring.application.name}")
-    private String appName;
 
     @Bean
     public PoseidonAuthConfigAdapter getAdapter(TokenService tokenService, SecurityStore securityStore){
@@ -136,7 +137,6 @@ public class SecurityAutoConfig {
                 //请求方式：POST/PUT/GET/DELETE
                 authUrlPathDO.setRequestType(requestMethod.toString());
             }
-            authUrlPathDO.setApplication(appName);
             resultList.add(authUrlPathDO);
         }
         return resultList;
@@ -147,4 +147,15 @@ public class SecurityAutoConfig {
     @ConditionalOnBean(DistributedLocker.class)
     public LogAspect getLogAspect(DistributedLocker distributedLocker){return new LogAspect(distributedLocker);}
 
+
+    //    配置错误页面
+    @Bean
+    public WebServerFactoryCustomizer containerCustomizer() {
+        return new WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>() {
+            @Override
+            public void customize(ConfigurableServletWebServerFactory factory) {
+                factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,"/public/notfound"),new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR,"/error_message"));
+            }
+        };
+    }
 }
