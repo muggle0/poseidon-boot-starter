@@ -2,8 +2,6 @@ package com.muggle.poseidon.util;
 
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
-import com.muggle.poseidon.base.exception.SimplePoseidonException;
-import com.muggle.poseidon.entity.SimpleUserDO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +15,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserInfoUtils {
 
-    public static SimpleUserDO getUserInfo() throws BasePoseidonCheckException {
+    public static UserDetails getUserInfo() throws BasePoseidonCheckException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication==null||authentication.getDetails()==null){
            return null;
         }
-        if (!(authentication instanceof SimpleUserDO )){
+        if (!(authentication instanceof UserDetails )){
             throw new SimplePoseidonCheckException("用户登陆信息异常");
         }
-        return (SimpleUserDO)authentication;
+        return (UserDetails)authentication;
     }
 }

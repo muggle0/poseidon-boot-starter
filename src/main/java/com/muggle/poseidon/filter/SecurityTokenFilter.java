@@ -3,18 +3,14 @@ package com.muggle.poseidon.filter;
 
 import com.muggle.poseidon.auto.PoseidonSecurityProperties;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
-import com.muggle.poseidon.entity.SimpleUserDO;
 import com.muggle.poseidon.properties.SecurityMessageProperties;
 import com.muggle.poseidon.store.SecurityStore;
-import com.muggle.poseidon.util.JwtTokenUtils;
-import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @program: poseidon-cloud-starter
