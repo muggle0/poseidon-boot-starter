@@ -1,7 +1,7 @@
 package com.muggle.poseidon.auto;
 
 import com.muggle.poseidon.adapter.PoseidonAuthConfigAdapter;
-import com.muggle.poseidon.aop.LogAspect;
+import com.muggle.poseidon.aop.RequestAspect;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import com.muggle.poseidon.entity.AuthUrlPathDO;
@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -145,9 +144,9 @@ public class SecurityAutoConfig {
     @Bean
     @Autowired
     @ConditionalOnBean(DistributedLocker.class)
-    public LogAspect getLogAspect(DistributedLocker distributedLocker){
+    public RequestAspect getLogAspect(DistributedLocker distributedLocker){
         log.info(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
-        return new LogAspect(distributedLocker);
+        return new RequestAspect(distributedLocker);
     }
 
 

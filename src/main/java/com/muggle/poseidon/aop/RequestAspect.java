@@ -14,12 +14,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 
 
 /**
@@ -28,19 +26,19 @@ import java.util.Enumeration;
  * @create: 2019-12-26 16:40
  */
 @Aspect
-public class LogAspect {
+public class RequestAspect {
     private DistributedLocker locker;
 
-    public LogAspect (DistributedLocker locker){
+    public RequestAspect(DistributedLocker locker){
         this.locker=locker;
     }
-    private static final Log log = LogFactory.getLog(LogAspect.class);
+    private static final Log log = LogFactory.getLog(RequestAspect.class);
 
     @Pointcut("@annotation(com.muggle.poseidon.annotation.InterfaceAction)")
-    public void log() {
+    public void request() {
     }
 
-    @Before("log()")
+    @Before("request()")
     public void doBefore(JoinPoint joinPoint) {
         log.debug("===============aop doBefore===============");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -95,10 +93,6 @@ public class LogAspect {
                 throw new SimplePoseidonException(message);
             }
         }
-    }
-    @After("log()")
-    public void doAfter() {
-        log.debug("================aop doAfter==============");
     }
 }
 
