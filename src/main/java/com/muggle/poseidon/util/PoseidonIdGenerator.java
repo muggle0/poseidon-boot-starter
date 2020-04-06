@@ -76,7 +76,7 @@ public abstract class PoseidonIdGenerator {
      *
      * @return
      */
-    public synchronized long nextId() {
+    public synchronized long simpleNextId() {
         long currStmp = getNewstmp();
         if (currStmp < lastStmp) {
             throw new RuntimeException("Clock moved backwards.  Refusing to generate id");
@@ -113,5 +113,7 @@ public abstract class PoseidonIdGenerator {
     private long getNewstmp() {
         return System.currentTimeMillis();
     }
+
+    public abstract long nextId();
 
 }

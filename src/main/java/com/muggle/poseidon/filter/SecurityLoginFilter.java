@@ -38,7 +38,7 @@ public class SecurityLoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try{
             UserDetails login = tokenService.login(request, response);
-            String token = securityStore.signUser(login);
+            String token = securityStore.signUserMessage(login);
             return  new UsernamePasswordAuthenticationToken(token, "");
         }catch (SimplePoseidonCheckException e){
             logger.error("登录校验异常：",e);

@@ -72,7 +72,7 @@ public class SecurityAutoConfig {
      * @return
      */
     @Bean
-    @Profile({"prod","test"})
+    @Profile({"prod","sit"})
     public CommandLineRunner init(final TokenService tokenService) {
         return new CommandLineRunner() {
             @Override

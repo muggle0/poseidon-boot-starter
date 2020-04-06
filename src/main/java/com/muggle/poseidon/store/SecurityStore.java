@@ -31,7 +31,7 @@ public interface SecurityStore {
      * @return:
      * @date 2019/11/5 11:40
      */
-    String signUser(UserDetails userDetails);
+    String signUserMessage(UserDetails userDetails);
 
     /**
     * @author muggle
