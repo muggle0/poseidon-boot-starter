@@ -145,7 +145,10 @@ public class SecurityAutoConfig {
     @Bean
     @Autowired
     @ConditionalOnBean(DistributedLocker.class)
-    public LogAspect getLogAspect(DistributedLocker distributedLocker){return new LogAspect(distributedLocker);}
+    public LogAspect getLogAspect(DistributedLocker distributedLocker){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
+        return new LogAspect(distributedLocker);
+    }
 
 
     //    配置错误页面

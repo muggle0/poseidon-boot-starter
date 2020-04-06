@@ -53,7 +53,7 @@ public class LogAspect {
             stringBuilder.append(" (").append(arg.toString()).append(") ");
         }
 
-        String userMessage = "用户名：%s";
+        String userMessage = "username=%s";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null) {
             userMessage = String.format(userMessage, "用户未登陆");
@@ -61,10 +61,9 @@ public class LogAspect {
             userMessage = String.format(userMessage, authentication.getPrincipal().toString());
         }
 
-        log.info("》》》》》》 请求日志   "+userMessage+"url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
-                + "host=" + request.getRemoteHost() + "port=" + request.getRemotePort()
-                + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
-                + "paramters [ " + stringBuilder.toString()+" ]");
+        log.info("请求日志  "+userMessage+" url=" + request.getRequestURI() + " method=" + request.getMethod() + " ip=" + RequestUtils.getIP(request)
+                + " classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
+                + " paramters=[" + stringBuilder.toString()+"]");
     }
 
     /**
@@ -81,11 +80,18 @@ public class LogAspect {
             String requestURI = request.getRequestURI();
             String remoteAddr = RequestUtils.getIP(request);
             log.info(String.format("请求进入幂等方法，开始尝试上锁 uri: %s ip:%s",requestURI,remoteAddr));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username="notSignin";
+            if (authentication != null && authentication.getPrincipal() == null) {
+                username= authentication.getPrincipal().toString();
+            }
+            String key="lock:idempotent:"+request.getRequestURI()+":"+username+":"+RequestUtils.getIP(request);
             long expertime = annotation.expertime();
-            String key = annotation.key();
+            log.info("冪等上锁 key :"+key);
             boolean trylock = locker.trylock(key, expertime);
             if (!trylock){
                 String message = annotation.message();
+                log.info(">>>>>>>>>>>>>>>>>>>>>> 获取幂等锁获取锁失败 key:"+key+"  <<<<<<<<<<<<<<<<<<<<<<<");
                 throw new SimplePoseidonException(message);
             }
         }

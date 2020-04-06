@@ -12,7 +12,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InterfaceAction {
    String message() default "请求太频繁，请稍后再试";
-   boolean Idempotent() default true;
+   boolean Idempotent() default false;
    long expertime() default 3L;
-   String key() default "action:default";
 }
