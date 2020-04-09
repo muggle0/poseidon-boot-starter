@@ -241,7 +241,9 @@ public class ExceptionListener implements ApplicationListener<ExceptionEvent> {
 
 ### 日志配置
 
-使用框架logback配置：`logging.config=classpath:poseidon-logback.xml` 具体配置信息信息在源码中有注释，这里不再赘述
+使用框架logback配置：`logging.config=classpath:poseidon-logback.xml` 具体配置信息信息在源码中有注释。这里的日志分类规则是：
+
+
 
 ## 框架使用及其二次开发建议
 
