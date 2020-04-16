@@ -16,6 +16,8 @@
 
 - 2020.4.5 项目从cloud-starter 分裂出来，补充部分不成熟地方。
 
+-2020.4.16 发布 `0.0.1.Beta` 版
+
 ## 快速开始
 
 具体使用案例可参考 [sofia](https://github.com/fighting-v/sofia) 小伙伴喜欢的可以关注下这个项目嗷。
@@ -284,6 +286,9 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.muggle.poseidon.handler.WebResultHandler,\
 com.username.lestener.ExceptionListener
 ```
+
+
+## 交流
 
 框架涉及到的知识点可以上 [muggle-book](https://muggle-book.gitee.io/) 去查找，对于框架使用过程中遇到的问题或者bug 可以加作者微信反馈：
 
