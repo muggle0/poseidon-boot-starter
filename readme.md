@@ -18,6 +18,8 @@
 
 -2020.4.16 发布 `0.0.1.Beta` 版
 
+- 2020.4.17 开始开发webflux版，提供对webflux的支持（webflux 分支 版本号0.0.1-webflux.Alpha）。
+
 ## 快速开始
 
 具体使用案例可参考 [sofia](https://github.com/fighting-v/sofia) 小伙伴喜欢的可以关注下这个项目嗷。
