@@ -35,7 +35,7 @@
             </pattern>
         </encoder>
     </appender>
-    <appender name="logs" class="ch.qos.logback.core.rolling.RollingFileAppender">
+   <!-- <appender name="logs" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>
                 ${log_dir}/%d{yyyy-MM-dd}-todo.log
@@ -48,7 +48,7 @@
             </pattern>
         </encoder>
 
-    </appender>
+    </appender>-->
 
      <appender name="logs-asyn" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="logs"/>
