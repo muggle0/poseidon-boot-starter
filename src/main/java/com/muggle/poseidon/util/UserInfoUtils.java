@@ -18,11 +18,11 @@ public class UserInfoUtils {
     public static UserDetails getUserInfo() throws BasePoseidonCheckException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication==null||authentication.getDetails()==null){
-           return null;
+            return null;
         }
-        if (!(authentication instanceof UserDetails )){
+        if (!(authentication.getDetails() instanceof UserDetails )){
             throw new SimplePoseidonCheckException("用户登陆信息异常");
         }
-        return (UserDetails)authentication;
+        return (UserDetails)authentication.getDetails();
     }
 }
