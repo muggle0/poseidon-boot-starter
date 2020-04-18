@@ -163,7 +163,7 @@ token:eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VybmFtZSI6Ii9hZG1pbi8qKiJ9.
 
 登录请求的url 为 `/sign_in` 访问该 url 的时候会调用 `TokenService.login` 方法来获取一个token返回给前端。`TokenService.loadUserByUsername` 为 security 框架默认的方法，这里不会去使用它，所以可以只实现该方法，不必去实现其逻辑
 
-当 spring 的 `profiles` 也就是配置 `spring.profiles.active` 为 `sit` 或者 `prod` 的 会获取 swagger 接口注解上的信息并调用： `TokenService.saveUrlInfo()` 的方法，你可以选择直接return 也可以 将这些 url 存到数据库 用于做权限控制
+当 spring 的 `profiles` 也就是配置 `spring.profiles.active` 为 "uat","sit","online","refresh" 时 会获取 swagger 接口注解上的信息并调用： `TokenService.saveUrlInfo()` 的方法，你可以选择直接return 也可以 将这些 url 存到数据库 用于做权限控制
   
 ### 日志切面相关配置
 
