@@ -4,6 +4,12 @@
 # poseidon-boot-starter 使用说明
 为 `poseidon-cloud-starter` 衍生项目， `poseidon-cloud-starter` 用于分布式项目 spring cloud 开发，该项目用于单体项目 springboot的开发
 
+对 springboot 项目感兴趣的小伙伴可以关注 [poseidon](https://github.com/muggle0/poseidon) 
+
+对 springCloud 感兴趣的小伙伴可以关注 [poseidon-cloud](https://github.com/muggle0/poseidon-cloud)
+
+本人的书：[muggle的书](https://muggle-book.gitee.io/)
+
 框架集成功能：
 
 - 异常报警
