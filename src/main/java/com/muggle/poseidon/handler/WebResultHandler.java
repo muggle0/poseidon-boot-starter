@@ -1,4 +1,4 @@
-package com.muggle.poseidon.handler;
+package com.muggle.poseidon.handler.web;
 
 import com.muggle.poseidon.base.ResultBean;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,7 +43,7 @@ public class WebResultHandler {
     @ExceptionHandler(value = {BasePoseidonException.class})
     public ResultBean poseidonExceptionHandler(BasePoseidonException e, HttpServletRequest req) {
         log.error("业务异常",e);
-        ResultBean error = ResultBean.error(e.getMessage());
+        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?500:e.getCode());
         return error;
     }
 
@@ -99,9 +98,9 @@ public class WebResultHandler {
      * @return
      */
     @ExceptionHandler(value = {BasePoseidonCheckException.class})
-    public ResultBean checked(Exception e, HttpServletRequest req) {
+    public ResultBean checked(BasePoseidonCheckException e, HttpServletRequest req) {
         log.error("自定义异常",e);
-        ResultBean error = ResultBean.error(e.getMessage());
+        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?500:e.getCode());
         return error;
     }
 
@@ -116,9 +115,9 @@ public class WebResultHandler {
     public ResultBean exceptionHandler(Exception e, HttpServletRequest req) {
         try {
             UserDetails userInfo = UserInfoUtils.getUserInfo();
+            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+userInfo.toString() , e);
             ExceptionEvent exceptionEvent = new ExceptionEvent(String.format("系统异常: [ %s ] 时间戳： [%d]  ", e.getMessage(),System.currentTimeMillis()), this);
             applicationContext.publishEvent(exceptionEvent);
-            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+userInfo.toString() , e);
             return ResultBean.error("系统异常");
         }catch (Exception err){
             log.error("紧急！！！ 严重的异常",err);
