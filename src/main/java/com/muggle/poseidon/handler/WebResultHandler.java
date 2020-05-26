@@ -1,4 +1,4 @@
-package com.muggle.poseidon.handler.web;
+package com.muggle.poseidon.handler;
 
 import com.muggle.poseidon.base.ResultBean;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
@@ -42,7 +42,7 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {BasePoseidonException.class})
     public ResultBean poseidonExceptionHandler(BasePoseidonException e, HttpServletRequest req) {
-        log.error("业务异常",e);
+        log.error("业务异常,错误码：{}",e.getCode(),e);
         ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?500:e.getCode());
         return error;
     }
@@ -99,7 +99,7 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {BasePoseidonCheckException.class})
     public ResultBean checked(BasePoseidonCheckException e, HttpServletRequest req) {
-        log.error("自定义异常",e);
+        log.error("自定义异常，错误码:{}",e.getCode(),e);
         ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?500:e.getCode());
         return error;
     }
