@@ -21,42 +21,7 @@ public class UserInfoUtils {
     public static UserDetails getUserInfo() throws BasePoseidonCheckException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication==null||authentication.getDetails()==null||authentication.getPrincipal().equals("anonymousUser")){
-            return new UserDetails() {
-                @Override
-                public Collection<? extends GrantedAuthority> getAuthorities() {
-                    return null;
-                }
-
-                @Override
-                public String getPassword() {
-                    return null;
-                }
-
-                @Override
-                public String getUsername() {
-                    return "无用户信息";
-                }
-
-                @Override
-                public boolean isAccountNonExpired() {
-                    return false;
-                }
-
-                @Override
-                public boolean isAccountNonLocked() {
-                    return false;
-                }
-
-                @Override
-                public boolean isCredentialsNonExpired() {
-                    return false;
-                }
-
-                @Override
-                public boolean isEnabled() {
-                    return false;
-                }
-            };
+            return null;
         }
         if (!(authentication.getDetails() instanceof UserDetails )){
             throw new SimplePoseidonCheckException("用户登陆信息异常");
