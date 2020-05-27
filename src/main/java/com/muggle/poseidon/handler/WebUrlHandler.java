@@ -28,7 +28,7 @@ public class WebUrlHandler implements ErrorController {
 
     @RequestMapping(value = "/public/notfound", produces = "application/json;charset=UTF-8")
     public ResultBean notfund(HttpServletRequest request) {
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>  客户端访问了错误的页面  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        log.debug(">>>>>>>>>>>>>>>>>>>>>>>>  客户端访问了错误的页面  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         return ResultBean.error("找不到页面", 404);
     }
 
