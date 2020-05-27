@@ -27,7 +27,7 @@ public class PoseidonLogoutSuccessHandler implements LogoutSuccessHandler {
         this.securityStore = securityStore;
     }
 
-    private final static Logger log = LoggerFactory.getLogger("requestLog");
+    private final static Logger log = LoggerFactory.getLogger("PoseidonLogoutSuccessHandler");
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         if (authentication==null){

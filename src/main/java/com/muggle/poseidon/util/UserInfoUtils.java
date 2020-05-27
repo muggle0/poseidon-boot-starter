@@ -20,7 +20,7 @@ public class UserInfoUtils {
 
     public static UserDetails getUserInfo() throws BasePoseidonCheckException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication==null||authentication.getDetails()==null){
+        if (authentication==null||authentication.getDetails()==null||authentication.getPrincipal().equals("anonymousUser")){
             return new UserDetails() {
                 @Override
                 public Collection<? extends GrantedAuthority> getAuthorities() {
