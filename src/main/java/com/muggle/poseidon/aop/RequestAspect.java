@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -51,17 +52,18 @@ public class RequestAspect {
             stringBuilder.append(" (").append(arg.toString()).append(") ");
         }
 
-        String userMessage = "username=%s";
+        String userMessage = "用户名：%s";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal() == null) {
+        if (authentication == null || authentication.getDetails() == null) {
             userMessage = String.format(userMessage, "用户未登陆");
         } else {
-            userMessage = String.format(userMessage, authentication.getPrincipal().toString());
+            userMessage = String.format(userMessage, ((UserDetails) authentication.getDetails()).getUsername());
         }
 
-        log.info("请求日志  "+userMessage+" url=" + request.getRequestURI() + " method=" + request.getMethod() + " ip=" + RequestUtils.getIP(request)
-                + " classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
-                + " paramters=[" + stringBuilder.toString()+"]");
+        log.info("》》》》》》 请求日志   "+userMessage+"url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
+                + "host=" + request.getRemoteHost() + "port=" + request.getRemotePort()
+                + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
+                + "paramters [ " + stringBuilder.toString()+" ]");
     }
 
     /**
