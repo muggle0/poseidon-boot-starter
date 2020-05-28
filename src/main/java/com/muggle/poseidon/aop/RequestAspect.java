@@ -68,8 +68,7 @@ public class RequestAspect {
     }
 
     /**
-     * 幂等操作
-     * @param joinPoint
+     * 幂等操作 @param joinPoint
      */
     private void verifyIdempotent(JoinPoint joinPoint) {
         InterfaceAction annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(InterfaceAction.class);
