@@ -57,7 +57,7 @@ public class RequestAspect {
         String userMessage = "用户名：%s";
         try {
             UserDetails userInfo = UserInfoUtils.getUserInfo();
-            userMessage=String.format(userMessage,userInfo.getUsername());
+            userMessage=String.format(userMessage,userInfo==null?"用户未登录":userInfo.getUsername());
         } catch (BasePoseidonCheckException e) {
             userMessage=String.format(userMessage,"非法的登录用户");
         }
