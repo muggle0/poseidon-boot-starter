@@ -61,7 +61,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
 
-        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html"};
+        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html","/**/*.css"};
         SecurityStore.ACCESS_PATHS.addAll(Arrays.asList(paths));
         web.ignoring().antMatchers(paths);
         SecurityStore.ACCESS_PATHS.add("/error_message");

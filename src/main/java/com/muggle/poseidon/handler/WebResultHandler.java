@@ -115,7 +115,7 @@ public class WebResultHandler {
     public ResultBean exceptionHandler(Exception e, HttpServletRequest req) {
         try {
             UserDetails userInfo = UserInfoUtils.getUserInfo();
-            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+userInfo==null?"无用户信息":userInfo.toString() , e);
+            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+(userInfo==null?"无用户信息":userInfo.toString()) , e);
             ExceptionEvent exceptionEvent = new ExceptionEvent(String.format("系统异常: [ %s ] 时间戳： [%d]  ", e.getMessage(),System.currentTimeMillis()), this);
             applicationContext.publishEvent(exceptionEvent);
             return ResultBean.error("系统异常");
