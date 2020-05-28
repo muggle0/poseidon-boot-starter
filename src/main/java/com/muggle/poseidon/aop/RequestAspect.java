@@ -2,8 +2,10 @@ package com.muggle.poseidon.aop;
 
 import com.muggle.poseidon.annotation.InterfaceAction;
 import com.muggle.poseidon.base.DistributedLocker;
+import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import com.muggle.poseidon.util.RequestUtils;
+import com.muggle.poseidon.util.UserInfoUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
@@ -53,13 +55,12 @@ public class RequestAspect {
         }
 
         String userMessage = "用户名：%s";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getDetails() == null) {
-            userMessage = String.format(userMessage, "用户未登陆");
-        } else {
-            userMessage = String.format(userMessage, ((UserDetails) authentication.getDetails()).getUsername());
+        try {
+            UserDetails userInfo = UserInfoUtils.getUserInfo();
+            userMessage=String.format(userMessage,userInfo.getUsername());
+        } catch (BasePoseidonCheckException e) {
+            userMessage=String.format(userMessage,"非法的登录用户");
         }
-
         log.info("》》》》》》 请求日志   "+userMessage+"url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
                 + "host=" + request.getRemoteHost() + "port=" + request.getRemotePort()
                 + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
