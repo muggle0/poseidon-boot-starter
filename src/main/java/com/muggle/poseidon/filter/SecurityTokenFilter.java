@@ -41,6 +41,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(SecurityTokenFilter.class);
 
     public SecurityTokenFilter(SecurityStore securityStore,PoseidonSecurityProperties properties) {
+        this.properties=properties;
         this.securityStore = securityStore;
     }
 
