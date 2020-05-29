@@ -12,7 +12,7 @@ public class SimplePoseidonCheckException extends BasePoseidonCheckException {
 
     public SimplePoseidonCheckException(String message) {
         super(message);
-        this.code=500;
+        this.code=5001;
     }
 
     public SimplePoseidonCheckException(String message,Integer code) {

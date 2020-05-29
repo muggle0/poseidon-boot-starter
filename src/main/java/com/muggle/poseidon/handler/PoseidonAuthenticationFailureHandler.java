@@ -21,7 +21,7 @@ public class PoseidonAuthenticationFailureHandler implements AuthenticationFailu
         log.error("用户登录验证失败: ",e);
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         final PrintWriter writer = httpServletResponse.getWriter();
-        writer.write("{\"code\":500,\"message\":\""+e.getMessage()+"\"}");
+        writer.write("{\"code\":5001,\"message\":\""+e.getMessage()+"\"}");
         writer.close();
     }
 }

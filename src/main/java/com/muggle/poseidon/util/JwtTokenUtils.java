@@ -105,9 +105,10 @@ public class JwtTokenUtils {
     }
 
     public static void main(String[] args) {
+//
         Map<String, Object> body=new HashMap<>();
         body.put("username","muggle");
-        body.put("version",UUID.randomUUID().toString());
+        body.put("version",System.currentTimeMillis());
         body.put("roles", Arrays.asList("admin","guest"));
         String test = createToken(body, "test");
         System.out.println(test);

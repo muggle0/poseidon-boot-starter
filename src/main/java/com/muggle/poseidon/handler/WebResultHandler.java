@@ -43,7 +43,7 @@ public class WebResultHandler {
     @ExceptionHandler(value = {BasePoseidonException.class})
     public ResultBean poseidonExceptionHandler(BasePoseidonException e, HttpServletRequest req) {
         log.error("业务异常,错误码：{}",e.getCode(),e);
-        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?500:e.getCode());
+        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?5001:e.getCode());
         return error;
     }
 
@@ -100,7 +100,7 @@ public class WebResultHandler {
     @ExceptionHandler(value = {BasePoseidonCheckException.class})
     public ResultBean checked(BasePoseidonCheckException e, HttpServletRequest req) {
         log.error("自定义异常，错误码:{}",e.getCode(),e);
-        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?500:e.getCode());
+        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?5001:e.getCode());
         return error;
     }
 
@@ -118,10 +118,10 @@ public class WebResultHandler {
             log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+(userInfo==null?"无用户信息":userInfo.toString()) , e);
             ExceptionEvent exceptionEvent = new ExceptionEvent(String.format("系统异常: [ %s ] 时间戳： [%d]  ", e.getMessage(),System.currentTimeMillis()), this);
             applicationContext.publishEvent(exceptionEvent);
-            return ResultBean.error("系统异常");
+            return ResultBean.error("系统异常",500);
         }catch (Exception err){
             log.error("紧急！！！ 严重的异常",err);
-            return ResultBean.error("系统发生严重的错误");
+            return ResultBean.error("系统发生严重的错误",500);
         }
     }
 }

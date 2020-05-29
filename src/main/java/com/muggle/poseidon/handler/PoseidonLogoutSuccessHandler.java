@@ -47,11 +47,11 @@ public class PoseidonLogoutSuccessHandler implements LogoutSuccessHandler {
                 writer.close();
             }else {
                 log.info("用户登出失败 token：{}",principal);
-                writer.write("{\"code\":\"500\",\"msg\":\"登出失败，请重试\"}");
+                writer.write("{\"code\":\"5001\",\"msg\":\"登出失败，请重试\"}");
             }
         }catch (Exception e){
             log.error("登出失败： ",e);
-            writer.write("{\"code\":\"500\",\"message\":\""+e.getMessage()+"\"}");
+            writer.write("{\"code\":\"5001\",\"message\":\""+e.getMessage()+"\"}");
         }finally {
             writer.close();
         }

@@ -73,7 +73,7 @@ public class ResultBean<T> implements Serializable {
     }
 
     public static<T> ResultBean<T> error(String message){
-        return new ResultBean<>(message,500);
+        return new ResultBean<>(message,5001);
     }
 
     public static<T> ResultBean<T> error(String message,Integer code){

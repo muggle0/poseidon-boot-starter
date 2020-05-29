@@ -62,6 +62,9 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
 
 //        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html","/**/*.css","/**/*.js"};
+        if (properties.getStaticPath()==null) {
+            properties.setStaticPath(new ArrayList<>());
+        }
         String[] paths = new String[properties.getStaticPath().size()];
         properties.getStaticPath().toArray(paths);
         web.ignoring().antMatchers(paths);
@@ -76,8 +79,10 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
         log.debug("》》》》 启动security配置");
 
         List<String> ignorePath = properties.getIgnorePath();
+
         if (ignorePath == null) {
-            ignorePath = new ArrayList<>();
+            properties.setIgnorePath(new ArrayList<>());
+            ignorePath =  properties.getIgnorePath();
         }
         String[] paths = new String[ignorePath.size()];
         ignorePath.toArray(paths);
@@ -105,7 +110,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     private AccessDecisionManager accessDecisionManager() {
         List<AccessDecisionVoter<? extends Object>> decisionVoters
                 = Arrays.asList(
-                new PoseidonWebExpressionVoter(tokenService));
+                new PoseidonWebExpressionVoter(tokenService,properties));
         return new UnanimousBased(decisionVoters);
 
     }

@@ -18,7 +18,7 @@ public class SimplePoseidonException extends BasePoseidonException{
 
     public SimplePoseidonException(String message) {
         super(message);
-        this.code=500;
+        this.code=5001;
     }
 
     @Override
