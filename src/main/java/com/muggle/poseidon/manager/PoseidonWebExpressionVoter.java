@@ -58,6 +58,13 @@ public class PoseidonWebExpressionVoter extends WebExpressionVoter {
                 return ACCESS_GRANTED;
             }
         }
+        for (String pattern :
+                properties.getIgnorePath()) {
+            boolean match = PATH_MATCHER.match(pattern, requestUrl);
+            if (match){
+                return ACCESS_GRANTED;
+            }
+        }
         boolean bool=tokenVerify(authentication);
         // 未携带token 或者token失效 用户被冻结 用户
         if (bool){
@@ -88,9 +95,6 @@ public class PoseidonWebExpressionVoter extends WebExpressionVoter {
         UserDetails userInfo=(UserDetails)details;
         boolean accountNonLocked = userInfo.isAccountNonLocked();
         boolean enabled = userInfo.isEnabled();
-        if (equals||!accountNonLocked||!enabled){
-            return true;
-        }
-        return false;
+        return equals || !accountNonLocked || !enabled;
     }
 }

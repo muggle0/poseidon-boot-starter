@@ -40,10 +40,10 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     private SecurityStore securityStore;
     private PoseidonSecurityProperties properties;
 
-    public PoseidonAuthConfigAdapter(TokenService tokenService, SecurityStore securityStore,PoseidonSecurityProperties properties) {
+    public PoseidonAuthConfigAdapter(TokenService tokenService, SecurityStore securityStore, PoseidonSecurityProperties properties) {
         this.tokenService = tokenService;
         this.securityStore = securityStore;
-        this.properties=properties;
+        this.properties = properties;
     }
 
     public PoseidonAuthConfigAdapter(boolean disableDefaults, TokenService tokenService, SecurityStore securityStore) {
@@ -61,13 +61,14 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
 
-        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html","/**/*.css"};
-        SecurityStore.ACCESS_PATHS.addAll(Arrays.asList(paths));
+//        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html","/**/*.css","/**/*.js"};
+        String[] paths = new String[properties.getStaticPath().size()];
+        properties.getStaticPath().toArray(paths);
         web.ignoring().antMatchers(paths);
         SecurityStore.ACCESS_PATHS.add("/error_message");
         SecurityStore.ACCESS_PATHS.add("/");
         SecurityStore.ACCESS_PATHS.add("/public/notfound");
-        log.debug("》》》》 初始化security 放行静态资源：{}" + "/**/*.bmp /**/*.png /**/*.gif /**/*.jpg /**/*.ico /**/*.js");
+//        log.debug("》》》》 初始化security 放行静态资源：{}" + "/**/*.bmp /**/*.png /**/*.gif /**/*.jpg /**/*.ico /**/*.js");
     }
 
     @Override
@@ -75,10 +76,10 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
         log.debug("》》》》 启动security配置");
 
         List<String> ignorePath = properties.getIgnorePath();
-        if (ignorePath==null){
-            ignorePath=new ArrayList<>();
+        if (ignorePath == null) {
+            ignorePath = new ArrayList<>();
         }
-        String [] paths=new String[ignorePath.size()];
+        String[] paths = new String[ignorePath.size()];
         ignorePath.toArray(paths);
         SecurityStore.saveAccessPath(ignorePath);
         http.authorizeRequests().antMatchers(paths).permitAll()
@@ -89,19 +90,19 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(poseidonTokenFilter(), LogoutFilter.class);
         http.exceptionHandling().authenticationEntryPoint(loginUrlAuthenticationEntryPoint()).accessDeniedHandler(new PoseidonAccessDeniedHandler());
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
-        http.addFilterAt(getLoginFilter(),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(getLoginFilter(), UsernamePasswordAuthenticationFilter.class);
         http.logout().logoutUrl(SecurityMessageProperties.LOGOUT).logoutSuccessHandler(getLogoutSuccessHandler()).permitAll();
     }
 
 
     /**
-    * @author muggle
-    * @Description: 设置投票器
-    * @Param:
-    * @return:
-    * @date 2019/11/6 8:38
-    */
-    private AccessDecisionManager accessDecisionManager(){
+     * @author muggle
+     * @Description: 设置投票器
+     * @Param:
+     * @return:
+     * @date 2019/11/6 8:38
+     */
+    private AccessDecisionManager accessDecisionManager() {
         List<AccessDecisionVoter<? extends Object>> decisionVoters
                 = Arrays.asList(
                 new PoseidonWebExpressionVoter(tokenService));
@@ -110,29 +111,29 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     }
 
     /**
-    * @author muggle
-    * @Description: token的过滤器
-    * @Param:
-    * @return:
-    * @date 2019/11/6 8:38
-    */
-    private SecurityTokenFilter poseidonTokenFilter(){
-        final SecurityTokenFilter poseidonTokenFilter = new SecurityTokenFilter(securityStore,properties);
+     * @author muggle
+     * @Description: token的过滤器
+     * @Param:
+     * @return:
+     * @date 2019/11/6 8:38
+     */
+    private SecurityTokenFilter poseidonTokenFilter() {
+        final SecurityTokenFilter poseidonTokenFilter = new SecurityTokenFilter(securityStore, properties);
         return poseidonTokenFilter;
     }
 
     /**
-    * @author muggle
-    * @Description: 未登陆处理器，当url为登陆权限时放行
-    * @Param:
-    * @return:
-    * @date 2019/11/5 12:01
-    */
+     * @author muggle
+     * @Description: 未登陆处理器，当url为登陆权限时放行
+     * @Param:
+     * @return:
+     * @date 2019/11/5 12:01
+     */
     private AuthenticationEntryPoint loginUrlAuthenticationEntryPoint() {
         return new PoseidonLoginUrlAuthenticationEntryPoint(SecurityMessageProperties.LOGIN_URL);
     }
 
-    private SecurityLoginFilter getLoginFilter(){
+    private SecurityLoginFilter getLoginFilter() {
         SecurityLoginFilter securityLoginFilter = new SecurityLoginFilter(tokenService, securityStore);
         securityLoginFilter.setAuthenticationFailureHandler(new PoseidonAuthenticationFailureHandler());
         securityLoginFilter.setAuthenticationSuccessHandler(new PoseidonAuthenticationSuccessHandler());
@@ -142,9 +143,10 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
 
     /**
      * 登出成功处理器
+     *
      * @return
      */
-    private LogoutSuccessHandler getLogoutSuccessHandler(){
+    private LogoutSuccessHandler getLogoutSuccessHandler() {
         return new PoseidonLogoutSuccessHandler(this.securityStore);
     }
 }

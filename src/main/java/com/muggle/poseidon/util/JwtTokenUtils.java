@@ -4,10 +4,7 @@ import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import com.muggle.poseidon.properties.SecurityMessageProperties;
 import io.jsonwebtoken.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @program: poseidon
@@ -78,14 +75,13 @@ public class JwtTokenUtils {
      * @param key
      * @return
      */
-    public static String getBody(String token,String credential,String key){
+    public static Object getBody(String token,String credential,String key){
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(credential)
                     .parseClaimsJws(token)
                     .getBody();
-            String body = claims.get(key,String.class);
-            return body;
+            return claims.get(key,Object.class);
         }catch (ExpiredJwtException e){
             throw new SimplePoseidonException("用户登录过期，请重新登录");
         }
@@ -97,6 +93,24 @@ public class JwtTokenUtils {
         body.put(SecurityMessageProperties.RANDOM,uuid.toString());
         body.put("key",storeKey);
         return createToken(body,credential,experTime);
+    }
+
+    public static String createToken(Map<String, Object> body, String credential){
+        String compact = Jwts.builder().signWith(SignatureAlgorithm.HS512, credential)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 12 * EXPIRATION))
+                .setClaims(body)
+                .compact();
+        return compact;
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> body=new HashMap<>();
+        body.put("username","muggle");
+        body.put("version",UUID.randomUUID().toString());
+        body.put("roles", Arrays.asList("admin","guest"));
+        String test = createToken(body, "test");
+        System.out.println(test);
     }
 }
 /**

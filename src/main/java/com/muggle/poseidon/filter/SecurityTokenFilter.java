@@ -11,10 +11,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,6 +31,10 @@ import java.io.IOException;
 public class SecurityTokenFilter extends OncePerRequestFilter {
 
     private SecurityStore securityStore;
+
+    private AntPathMatcher pathMatcher=new AntPathMatcher();
+
+    private  PoseidonSecurityProperties properties;
 
 
     /** logger */
@@ -51,14 +57,34 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException ,AccessDeniedException{
         log.debug("》》》》 开始校验token");
         // 如果是开放权限的url直接通过
+        String requestURI = httpServletRequest.getRequestURI();
+        for (String staticPath : properties.getStaticPath()) {
+            boolean match = pathMatcher.match(staticPath, requestURI);
+            if (match){
+                filterChain.doFilter(httpServletRequest,httpServletResponse);
+                return;
+            }
+        }
         String token = httpServletRequest.getHeader("token");
-        if (token==null){
+        Cookie[] cookies = httpServletRequest.getCookies();
+        String cookieToken=null;
+        if (cookies != null){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    cookieToken=cookie.getValue();
+                }
+            }
+        }
+
+
+        if (token==null&&cookieToken==null){
             filterChain.doFilter(httpServletRequest,httpServletResponse);
             return;
         }
+
         UserDetails userDetails =null;
         try {
-            userDetails = securityStore.getUserdetail(token);
+            userDetails = securityStore.getUserdetail(token==null?cookieToken:token);
         }catch (BasePoseidonCheckException e){
             log.error("》》》》 用户凭证为badToken {}",e.getMessage());
             SecurityContextHolder.getContext().setAuthentication(getBadToken(e.getMessage()));

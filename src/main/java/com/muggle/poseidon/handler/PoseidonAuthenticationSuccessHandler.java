@@ -1,5 +1,7 @@
 package com.muggle.poseidon.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.muggle.poseidon.base.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -20,7 +22,9 @@ public class PoseidonAuthenticationSuccessHandler extends SimpleUrlAuthenticatio
         log.debug("登录成功！");
         response.setContentType("application/json;charset=UTF-8");
         final PrintWriter writer = response.getWriter();
-        writer.write("{\"code\":200,\"message\":\"登录成功\",\"data\":\"" + principal + "\"}");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = objectMapper.writeValueAsString(ResultBean.successData(principal));
+        writer.write(result);
         writer.close();
     }
 }

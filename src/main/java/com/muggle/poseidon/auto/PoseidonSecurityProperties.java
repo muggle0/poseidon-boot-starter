@@ -2,6 +2,7 @@ package com.muggle.poseidon.auto;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +18,23 @@ public class PoseidonSecurityProperties {
     /** 放行的url **/
     private List<String> ignorePath;
 
+    private List<String> staticPath;
+
+    public List<String> getStaticPath() {
+        if (staticPath==null){
+            return Collections.emptyList();
+        }
+        return staticPath;
+    }
+
+    public void setStaticPath(List<String> staticPath) {
+        this.staticPath = staticPath;
+    }
+
     public List<String> getIgnorePath() {
+        if (ignorePath==null){
+            return Collections.emptyList();
+        }
         return ignorePath;
     }
 
