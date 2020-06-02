@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,12 +56,21 @@ public class WebResultHandler {
      * @return
      */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
-    public ResultBean MethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest req) {
+    public ResultBean methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest req) {
         log.error("参数未通过校验",e);
-        ResultBean error = ResultBean.error(e.getMessage());
+        ResultBean error = ResultBean.error(e.getBindingResult().getFieldError().getDefaultMessage());
         return error;
     }
 
+    /**
+     * BeanPropertyBindingResult
+     * */
+    @ExceptionHandler(value = {BindException.class})
+    public ResultBean beanPropertyBindingResult(BindException e, HttpServletRequest req) {
+        log.error("参数未通过校验",e);
+        ResultBean error = ResultBean.error(e.getFieldError().getDefaultMessage());
+        return error;
+    }
     /**
      * 错误的请求方式
      *
