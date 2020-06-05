@@ -8,4 +8,5 @@ import org.springframework.util.NumberUtils;
  * @Date: 2020/6/5
  **/
 public class INumberUtils extends NumberUtils {
+
 }
