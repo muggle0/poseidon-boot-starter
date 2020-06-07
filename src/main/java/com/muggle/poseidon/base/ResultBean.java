@@ -19,6 +19,7 @@ public class ResultBean<T> implements Serializable {
     private String message;
     private Integer code;
     private T data;
+    private Long total;
 
     public String getMessage() {
         return message;
@@ -89,4 +90,11 @@ public class ResultBean<T> implements Serializable {
 
     }
 
+    public Long getTotal() {
+        return total;
+    }
+
+    public void setTotal(Long total) {
+        this.total = total;
+    }
 }

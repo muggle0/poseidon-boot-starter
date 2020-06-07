@@ -8,4 +8,6 @@ package com.muggle.poseidon.base;
  **/
 
 public abstract class BaseBean {
+
+
 }
