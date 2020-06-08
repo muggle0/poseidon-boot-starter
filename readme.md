@@ -27,7 +27,7 @@
 
 - 2020.4.17 开始开发webflux版，提供对webflux的支持（webflux 分支 版本号0.0.1-webflux.Alpha）。
 
-- `0.0.1.Beta` 添加查询组件功能
+- `0.0.1.Beta` 添加查询组件功能,并计划发布`0.0.1.release`。
 
 ## 快速开始
 

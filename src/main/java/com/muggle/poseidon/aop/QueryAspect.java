@@ -60,7 +60,7 @@ public class QueryAspect {
         if (result instanceof ResultBean) {
             Object data = ((ResultBean) result).getData();
             if (sqlProcessor!=null){
-                sqlProcessor.afterReturningQuery((ResultBean) data);
+                sqlProcessor.afterReturningQuery((ResultBean) result);
             }
             if (data instanceof Page) {
                 ((ResultBean) result).setTotal(((Page) data).getTotal());
