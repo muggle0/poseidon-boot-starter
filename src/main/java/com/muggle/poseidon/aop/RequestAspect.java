@@ -43,7 +43,7 @@ public class RequestAspect {
 
     @Before("request()")
     public void doBefore(JoinPoint joinPoint) {
-        log.debug("===============aop doBefore===============");
+        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 请求日志切面 dobefore <<<<<<<<<<<<<<<<<<<<<");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         this.verifyIdempotent(joinPoint);
@@ -73,7 +73,7 @@ public class RequestAspect {
     private void verifyIdempotent(JoinPoint joinPoint) {
         InterfaceAction annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(InterfaceAction.class);
         boolean idempotent = annotation.Idempotent();
-        log.debug("幂等操作》》》》》");
+        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 幂等操作 <<<<<<<<<<<<<<<<<<<<<");
         if (idempotent){
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();

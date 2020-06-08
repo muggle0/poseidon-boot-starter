@@ -23,7 +23,11 @@ public class QueryAspect {
 
     private static final Log log = LogFactory.getLog(QueryAspect.class);
 
-    @Pointcut("execution(* *.*Controller.*(com.muggle.poseidon.base.BaseNormalQuery+))")
+    public QueryAspect() {
+        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 查询切面注册 <<<<<<<<<<<<<<<<<<<<<");
+    }
+
+    @Pointcut("execution(* *..*.*Controller.*(com.muggle.poseidon.base.BaseNormalQuery+))")
     public void query() {
     }
 

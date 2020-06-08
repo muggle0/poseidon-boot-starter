@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WebUrlHandler implements ErrorController {
 
     public WebUrlHandler() {
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> WebUrlHandler init <<<<<<<<<<<<<<<<<<<<");
+        log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> WebUrlHandler 注册 <<<<<<<<<<<<<<<<<<<<");
     }
 
     private static final Logger log = LoggerFactory.getLogger(WebUrlHandler.class);

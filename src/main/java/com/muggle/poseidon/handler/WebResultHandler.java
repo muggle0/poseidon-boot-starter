@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WebResultHandler {
 
     public WebResultHandler() {
-        log.info(">>>>>>>>>>>>>>>>>>>>> WebResultHandler init <<<<<<<<<<<<<<<<<<<<");
+        log.debug(">>>>>>>>>>>>>>>>>>>>> WebResultHandler 注册 <<<<<<<<<<<<<<<<<<<<");
     }
 
     private static final Logger log = LoggerFactory.getLogger(WebResultHandler.class);

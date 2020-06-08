@@ -76,7 +76,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        log.debug("》》》》 启动security配置");
+        log.debug(">>>>>>>>>>>>>>>>>>>>> 启动security配置 <<<<<<<<<<<<<<<<<<<< ");
 
         List<String> ignorePath = properties.getIgnorePath();
 
