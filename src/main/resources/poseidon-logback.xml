@@ -5,10 +5,12 @@
 
     <jmxConfigurator/>
 
-    <property name="maxHistory" value="100"/>
+    <!--日志文件 最大保存天数-->
     <property name="maxHistory" value="180" />
+    <!--日志文件路径-->
     <springProperty scope="context" name="log_dir" source="log.dir"/>
 
+    <!--控制台日志配置-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
@@ -19,7 +21,7 @@
         </encoder>
     </appender>
 
-
+    <!--文件日志配置-->
     <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>

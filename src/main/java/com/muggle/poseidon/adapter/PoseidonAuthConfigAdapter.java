@@ -3,7 +3,7 @@ package com.muggle.poseidon.adapter;
 import com.muggle.poseidon.auto.PoseidonSecurityProperties;
 import com.muggle.poseidon.filter.SecurityLoginFilter;
 import com.muggle.poseidon.filter.SecurityTokenFilter;
-import com.muggle.poseidon.handler.*;
+import com.muggle.poseidon.handler.security.*;
 import com.muggle.poseidon.manager.PoseidonWebExpressionVoter;
 import com.muggle.poseidon.properties.SecurityMessageProperties;
 import com.muggle.poseidon.service.TokenService;

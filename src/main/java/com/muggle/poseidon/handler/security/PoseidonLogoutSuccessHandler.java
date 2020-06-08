@@ -1,4 +1,4 @@
-package com.muggle.poseidon.handler;
+package com.muggle.poseidon.handler.security;
 
 import com.muggle.poseidon.store.SecurityStore;
 import org.slf4j.Logger;

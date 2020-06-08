@@ -27,6 +27,8 @@
 
 - 2020.4.17 开始开发webflux版，提供对webflux的支持（webflux 分支 版本号0.0.1-webflux.Alpha）。
 
+- `0.0.1.Beta` 添加查询组件功能
+
 ## 快速开始
 
 具体使用案例可参考 [sofia](https://github.com/fighting-v/sofia) 小伙伴喜欢的可以关注下这个项目嗷。
@@ -213,7 +215,7 @@ POSEIDON---- 2020-04-06 12:15:06 [http-nio-8080-exec-3] INFO  com.muggle.poseido
 
 ### 统一异常处理相关配置
 
-`com.muggle.poseidon.handler.WebResultHandler.WebResultHandler` 是统一异常处理类，该类定义了部分异常捕获后返回给前端的json信息，用户根据实际情况按需调整。
+`com.muggle.poseidon.handler.web.WebResultHandler.WebResultHandler` 是统一异常处理类，该类定义了部分异常捕获后返回给前端的json信息，用户根据实际情况按需调整。
 
 这里需要注意一个 异常报警功能的使用：
 
@@ -250,9 +252,137 @@ public class ExceptionListener implements ApplicationListener<ExceptionEvent> {
 }
 ```
 
+
+我们还可以添加我们自定义的异常拦截，我们需要，继承 `com.muggle.poseidon.handler.web.WebResultHandler` 然后添加我们需要的处理方法， 示例：
+```java
+@RestControllerAdvice
+@Configuration
+public class MyWebResultHandler extends WebResultHandler {
+    private static final Logger log = LoggerFactory.getLogger(OAwebResultHandler.class);
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResultBean methodArgumentNotValidException(ConstraintViolationException e, HttpServletRequest req) {
+        log.error("参数未通过校验", e);
+        ResultBean error = ResultBean.error(e.getConstraintViolations().iterator().next().getMessage());
+        return error;
+    }
+}
+```
+示例中添加了一个参数校验异常处理方法。
+
+对于其他的异常处理逻辑请阅读源码 `com.muggle.poseidon.handler.web.WebResultHandler` 类。
+
+### 查询组件的使用。
+
+为了减少开发者对查询接口开发的开发时间，该框架设计了一个简单的配合 `PageHelper` 使用的插件，该功能由于构思不是很成熟，
+所以其部分实现需要框架的使用者自己去完成。下面介绍该功能的使用方式和原理：
+
+第一步注册查询拦截切面：
+```java
+    @Bean
+    QueryAspect getQueryAspect(){
+        return new QueryAspect();
+    }
+```
+
+第二步定义查询类：
+
+```java
+public class MyQuery extends BaseQuery {
+    
+    @ApiModelProperty(value = "是否有效")
+    private Boolean enable;
+    
+    @ApiModelProperty(value = "请求类型")
+    private String requestType;
+    
+    @ApiModelProperty(value = "类名")
+    private String className;
+    
+    @ApiModelProperty(value = "方法名")
+    private String methodName;
+    
+    @ApiModelProperty(value = "请求路径")
+    private String url;
+    
+    @ApiModelProperty(value = "描述")
+    private String description;
+        
+
+    private String finalSql;
+
+    @Override
+    public void processSql() {
+        Map<String, Operator> operatorMap = this.getOperatorMap();
+        StringBuilder builder=new StringBuilder();
+        if (operatorMap!=null){
+            Iterator<String> iterator = operatorMap.keySet().iterator();
+            while (iterator.hasNext()) {
+                String next = iterator.next();
+                try {
+                    Object field=getFieldValue(next);
+                    if ((field instanceof Number)){
+                        builder.append(next+operatorMap.get(next).getValue()+field);
+                    }else {
+                        builder.append(next+operatorMap.get(next).getValue()+"'"+field+"'");
+                    }
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new OAException("查询参数异常："+next);
+                }
+            }
+        }
+
+        List<String> groupBy = this.getGroupBy();
+        if (!CollectionUtils.isEmpty(groupBy)){
+            builder.append(" group by");
+            for (int i = 0; i < groupBy.size(); i++) {
+                if (i==groupBy.size()-1){
+                    builder.append(groupBy.get(i));
+                }else {
+                    builder.append(groupBy.get(i)+",");
+                }
+            }
+        }
+        this.finalSql=builder.toString();
+    }
+
+    private Object getFieldValue(String next) throws NoSuchFieldException, IllegalAccessException {
+        Field field = this.getClass().getDeclaredField(next);
+        //打开私有访问
+        field.setAccessible(true);
+        //获取属性值
+        return field.get(this);
+    }
+
+    @Override
+    public String getFinalSql() {
+        return finalSql;
+    }
+
+    public void setFinalSql(String finalSql) {
+        this.finalSql = finalSql;
+    }
+}
+```
+
+然后在 `mybatis` 的xml中使用 `finalSql` ：
+```xml
+    <select id="getUrlInfo" resultMap="base">
+        select  * from table
+       where  1=1
+        <if test="finalSql !=null ">
+          and  ${finalSql}
+        </if>
+    </select>
+```
+这个功能的设计思路是 在 `BaseQuery` 的 `orderBy` 字段为排序的list，`groupBy` 是 排序的list, `operatorMap` 是字段的运算符。
+在 `QueryAspect` 的切面中它做的事情很简单，调用 `processSql()` 方法和 `init()` 方法，同时会调用 `QuerySqlProcessor` 的方法进行返回值和查询参数的自定义处理。
+所以这个功能只定义最基础的骨架，其内部的具体实现还是要使用者自己去完成。
+
+
+
 ### 日志配置
 
-使用框架logback配置：`logging.config=classpath:poseidon-logback.xml` 具体配置信息信息在源码中有注释。这里的日志分类规则是：
+使用框架logback配置：`logging.config=classpath:poseidon-logback.xml` 具体配置信息信息在源码中有注释。
 
 
 
@@ -292,7 +422,7 @@ public class ExceptionListener implements ApplicationListener<ExceptionEvent> {
 
 ```properties
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.muggle.poseidon.handler.WebResultHandler,\
+com.muggle.poseidon.handler.web.WebResultHandler,\
 com.username.lestener.ExceptionListener
 ```
 

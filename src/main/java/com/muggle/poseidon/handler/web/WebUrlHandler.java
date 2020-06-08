@@ -1,4 +1,4 @@
-package com.muggle.poseidon.handler;
+package com.muggle.poseidon.handler.web;
 
 import com.muggle.poseidon.base.ResultBean;
 import org.slf4j.Logger;

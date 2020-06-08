@@ -1,6 +1,5 @@
-package com.muggle.poseidon.handler;
+package com.muggle.poseidon.handler.security;
 
-import com.muggle.poseidon.manager.PoseidonWebExpressionVoter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.AuthenticationException;

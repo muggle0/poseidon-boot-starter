@@ -12,7 +12,7 @@ import java.util.Map;
  * @Date: 2020/6/5
  **/
 
-public abstract class BaseNormalQuery {
+public abstract class BaseQuery {
 
     private List<String> orderBy;
 

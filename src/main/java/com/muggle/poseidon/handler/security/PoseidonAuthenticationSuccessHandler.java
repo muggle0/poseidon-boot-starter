@@ -1,4 +1,4 @@
-package com.muggle.poseidon.handler;
+package com.muggle.poseidon.handler.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muggle.poseidon.base.ResultBean;
