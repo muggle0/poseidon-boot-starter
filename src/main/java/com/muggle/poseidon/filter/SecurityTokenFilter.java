@@ -56,7 +56,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException ,AccessDeniedException{
-        log.debug("》》》》 开始校验token");
+        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 开始校验token <<<<<<<<<<<<<<<<<<<<<");
         // 如果是开放权限的url直接通过
         String requestURI = httpServletRequest.getRequestURI();
         for (String staticPath : properties.getStaticPath()) {
@@ -92,7 +92,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(httpServletRequest,httpServletResponse);
             return;
         }catch (Exception e){
-            log.error("》》》》token 解析异常：",e);
+            log.error("》》》》 token 解析异常：",e);
             SecurityContextHolder.getContext().setAuthentication(getBadToken("请求信息非法，无法解析"));
             filterChain.doFilter(httpServletRequest,httpServletResponse);
             return;
