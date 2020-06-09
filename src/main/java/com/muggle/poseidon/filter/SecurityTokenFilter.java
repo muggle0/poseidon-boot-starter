@@ -46,7 +46,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
     }
 
     /**
-     *
+     * 该过滤器会首先从 请求头中获取
      * @param httpServletRequest
      * @param httpServletResponse
      * @param filterChain
@@ -57,15 +57,6 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException ,AccessDeniedException{
         log.debug(">>>>>>>>>>>>>>>>>>>>>>> 开始校验token <<<<<<<<<<<<<<<<<<<<<");
-        // 如果是开放权限的url直接通过
-        String requestURI = httpServletRequest.getRequestURI();
-        for (String staticPath : properties.getStaticPath()) {
-            boolean match = pathMatcher.match(staticPath, requestURI);
-            if (match){
-                filterChain.doFilter(httpServletRequest,httpServletResponse);
-                return;
-            }
-        }
         String token = httpServletRequest.getHeader("token");
         Cookie[] cookies = httpServletRequest.getCookies();
         String cookieToken=null;
@@ -76,8 +67,6 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
                 }
             }
         }
-
-
         if (token==null&&cookieToken==null){
             filterChain.doFilter(httpServletRequest,httpServletResponse);
             return;
