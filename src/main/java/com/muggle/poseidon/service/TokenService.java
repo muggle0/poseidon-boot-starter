@@ -27,10 +27,10 @@ public interface TokenService extends UserDetailsService {
     boolean rooleMatch(Collection<? extends GrantedAuthority> authorities, String path);
 
     /**
-     * 项目初始化插入权限表
+     * 项目初始化url处理方法
      * @param list
      */
-    void saveUrlInfo(List<AuthUrlPathDO> list);
+    void processUrl(List<AuthUrlPathDO> list);
 
     /**
      * 登录方法（可以自定义登录逻辑，比如加验证码等等）

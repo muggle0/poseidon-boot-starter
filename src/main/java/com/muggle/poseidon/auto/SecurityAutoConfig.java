@@ -5,6 +5,7 @@ import com.muggle.poseidon.aop.RequestAspect;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import com.muggle.poseidon.entity.AuthUrlPathDO;
+import com.muggle.poseidon.handler.security.RequestLogProcessor;
 import com.muggle.poseidon.service.TokenService;
 import com.muggle.poseidon.store.SecurityStore;
 import io.swagger.annotations.Api;
@@ -56,6 +57,9 @@ public class SecurityAutoConfig {
     @Autowired
     private WebApplicationContext applicationContext;
 
+    @Autowired(required = false)
+    RequestLogProcessor logProcessor;
+
     @Bean
     public PoseidonAuthConfigAdapter getAdapter(TokenService tokenService, SecurityStore securityStore){
         log.debug(">>>>>>>>>>>>>>>>>>>>>>> 开启自动化配置 <<<<<<<<<<<<<<<<<<<<<");
@@ -78,7 +82,7 @@ public class SecurityAutoConfig {
             public void run(String... strings) throws Exception {
                 log.debug(">>>>>>>>>>>>>>>>>>>>>>> 权限系统开机任务执行 <<<<<<<<<<<<<<<<<<<<<");
                 List<AuthUrlPathDO> allURL = getAllURL();
-                tokenService.saveUrlInfo(allURL);
+                tokenService.processUrl(allURL);
             }
         };
     }
@@ -146,7 +150,7 @@ public class SecurityAutoConfig {
     @ConditionalOnBean(DistributedLocker.class)
     public RequestAspect getLogAspect(DistributedLocker distributedLocker){
         log.debug(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
-        return new RequestAspect(distributedLocker);
+        return new RequestAspect(distributedLocker,logProcessor);
     }
 
 

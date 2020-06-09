@@ -12,7 +12,7 @@ import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 public interface DistributedLocker {
 
     /**
-     * \锁 非阻塞 单位：毫秒
+     * \锁 非阻塞 单位：秒
      *
      * @param key
      * @param express

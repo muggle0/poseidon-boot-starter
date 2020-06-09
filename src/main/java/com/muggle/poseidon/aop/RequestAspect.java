@@ -4,15 +4,13 @@ import com.muggle.poseidon.annotation.InterfaceAction;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
+import com.muggle.poseidon.handler.security.RequestLogProcessor;
 import com.muggle.poseidon.util.RequestUtils;
 import com.muggle.poseidon.util.UserInfoUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +30,10 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestAspect {
     private DistributedLocker locker;
 
-    public RequestAspect(DistributedLocker locker){
+    private RequestLogProcessor logProcessor;
+
+    public RequestAspect(DistributedLocker locker,RequestLogProcessor logProcessor){
+        this.logProcessor=logProcessor;
         this.locker=locker;
     }
     private static final Log log = LogFactory.getLog(RequestAspect.class);
@@ -61,10 +62,13 @@ public class RequestAspect {
         } catch (BasePoseidonCheckException e) {
             userMessage=String.format(userMessage,"非法的登录用户");
         }
-        log.info("》》》》》》 请求日志   "+userMessage+"url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
+        log.info("》》》》》》 请求日志   "+userMessage+" url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
                 + "host=" + request.getRemoteHost() + "port=" + request.getRemotePort()
                 + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
                 + "paramters [ " + stringBuilder.toString()+" ]");
+        if (logProcessor !=null){
+            logProcessor.recordBefore(request,joinPoint);
+        }
     }
 
     /**
@@ -73,8 +77,8 @@ public class RequestAspect {
     private void verifyIdempotent(JoinPoint joinPoint) {
         InterfaceAction annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(InterfaceAction.class);
         boolean idempotent = annotation.Idempotent();
-        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 幂等操作 <<<<<<<<<<<<<<<<<<<<<");
         if (idempotent){
+            log.debug(">>>>>>>>>>>>>>>>>>>>>>> 幂等操作 <<<<<<<<<<<<<<<<<<<<<");
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String requestURI = request.getRequestURI();
@@ -95,6 +99,14 @@ public class RequestAspect {
                 throw new SimplePoseidonException(message);
             }
         }
+    }
+
+
+
+    @AfterReturning(pointcut = "request()", returning = "result")
+    public void doAfterReturning(JoinPoint joinPoint, Object result) {
+        log.debug(">>>>>>>>>>>>>>>>>>>>>> 操作日志，返回值切面执行  <<<<<<<<<<<<<<<<<<<<<<< ");
+        logProcessor.recordAfterReturning(result);
     }
 }
 

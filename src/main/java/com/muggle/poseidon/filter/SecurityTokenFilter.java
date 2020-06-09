@@ -46,7 +46,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
     }
 
     /**
-     * 该过滤器会首先从 请求头中获取
+     * 该过滤器会首先从请求头中获取token，如果获取失败则会从cookie 中获取token，key都是 token
      * @param httpServletRequest
      * @param httpServletResponse
      * @param filterChain
