@@ -57,15 +57,15 @@ public abstract class BaseQuery {
      * 运算符
      */
     public enum Operator {
-        equals("=%s"),
-        notEqual("<>%s"),
-        moreThan(">%s"),
-        lessThan("<%s"),
-        leftLike("%s%%"),
-        notNull("%s IS NOT NULL"),
-        isNull("%s IS NULL"),
-        in("in (%s)"),
-        allLike("%%%s%%");
+        equals("=%s "),
+        notEqual("<>%s "),
+        moreThan(">%s "),
+        lessThan("<%s "),
+        leftLike("LIKE '%s%%' "),
+        notNull("%s IS NOT NULL "),
+        isNull("%s IS NULL "),
+        in("in (%s) "),
+        allLike("LIKE '%%%s%%' ");
 
         private String value;
 
