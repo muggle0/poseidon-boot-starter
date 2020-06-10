@@ -106,7 +106,9 @@ public class RequestAspect {
     @AfterReturning(pointcut = "request()", returning = "result")
     public void doAfterReturning(JoinPoint joinPoint, Object result) {
         log.debug(">>>>>>>>>>>>>>>>>>>>>> 操作日志，返回值切面执行  <<<<<<<<<<<<<<<<<<<<<<< ");
-        logProcessor.recordAfterReturning(result);
+        if (logProcessor!=null){
+            logProcessor.recordAfterReturning(result);
+        }
     }
 }
 
