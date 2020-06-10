@@ -37,10 +37,10 @@ public abstract class BaseQuery {
     }
 
     /**
-     * 传入函数式接口方便自定义扩展
-     * @param function
+     * sql 转化
+     * @param
      */
-    public abstract void processSql(Function<String,String> function);
+    public abstract void processSql();
 
     /**
      * 在mybati中使用sql注入 形如 where ${finalSql}

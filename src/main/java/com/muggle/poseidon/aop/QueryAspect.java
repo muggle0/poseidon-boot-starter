@@ -43,10 +43,10 @@ public class QueryAspect {
         for (Object arg : args) {
             if (arg instanceof BaseQuery) {
                 BaseQuery query = (BaseQuery) arg;
+                query.init();
                 if (sqlProcessor!=null){
                     sqlProcessor.beforeQuery(query);
                 }
-                query.init();
                 query.processSql();
             }
         }
