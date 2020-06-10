@@ -18,7 +18,6 @@ public class PoseidonAuthenticationFailureHandler implements AuthenticationFailu
     private static final Logger log= LoggerFactory.getLogger(PoseidonAuthenticationFailureHandler.class);
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        log.error("用户登录验证失败: ",e);
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         final PrintWriter writer = httpServletResponse.getWriter();
         writer.write("{\"code\":5001,\"message\":\""+e.getMessage()+"\"}");

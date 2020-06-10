@@ -41,11 +41,10 @@ public class SecurityLoginFilter extends UsernamePasswordAuthenticationFilter {
             String token = securityStore.signUserMessage(login);
             return  new UsernamePasswordAuthenticationToken(token, "");
         }catch (SimplePoseidonCheckException e){
-            logger.error("登录校验异常：",e);
             throw new AuthenticationServiceException(e.getMessage());
         }catch (Exception e){
             logger.error("系统异常：",e);
-            throw new AuthenticationServiceException(e.getMessage());
+            throw new AuthenticationServiceException("系统异常");
         }
 
     }
