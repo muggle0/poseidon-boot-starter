@@ -1,6 +1,7 @@
 package com.muggle.poseidon.base;
 
 import com.github.pagehelper.PageHelper;
+import org.springframework.cglib.core.internal.Function;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -35,8 +36,16 @@ public abstract class BaseQuery {
         }
     }
 
-    public abstract void processSql();
+    /**
+     * 传入函数式接口方便自定义扩展
+     * @param function
+     */
+    public abstract void processSql(Function<String,String> function);
 
+    /**
+     * 在mybati中使用sql注入 形如 where ${finalSql}
+     * @return
+     */
     public abstract String getFinalSql();
 
 
@@ -44,6 +53,9 @@ public abstract class BaseQuery {
         DESC, ASC
     }
 
+    /**
+     * 运算符
+     */
     public enum Operator {
         equals("=%s"),
         notEqual("<>%s"),
