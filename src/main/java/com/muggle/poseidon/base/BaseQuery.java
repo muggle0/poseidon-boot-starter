@@ -45,7 +45,16 @@ public abstract class BaseQuery {
     }
 
     public enum Operator {
-        equals("="), moreThan(">"), lessThan("<"), leftLike("s%%"), allLike("");
+        equals("=%s"),
+        notEqual("<>%s"),
+        moreThan(">%s"),
+        lessThan("<%s"),
+        leftLike("%s%%"),
+        notNull("%s IS NOT NULL"),
+        isNull("%s IS NULL"),
+        in("in (%s)"),
+        allLike("%%%s%%");
+
         private String value;
 
         Operator(String value) {
