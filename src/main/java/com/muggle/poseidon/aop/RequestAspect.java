@@ -67,7 +67,7 @@ public class RequestAspect {
                 + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
                 + "paramters [ " + stringBuilder.toString()+" ]");
         if (logProcessor !=null){
-            logProcessor.recordBefore(request,joinPoint);
+            logProcessor.recordBefore(request,joinPoint.getArgs());
         }
     }
 
@@ -107,7 +107,7 @@ public class RequestAspect {
     public void doAfterReturning(JoinPoint joinPoint, Object result) {
         log.debug(">>>>>>>>>>>>>>>>>>>>>> 操作日志，返回值切面执行  <<<<<<<<<<<<<<<<<<<<<<< ");
         if (logProcessor!=null){
-            logProcessor.recordAfterReturning(result);
+            logProcessor.recordAfterReturning(result,joinPoint.getArgs());
         }
     }
 }
