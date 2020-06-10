@@ -22,8 +22,5 @@ public interface QuerySqlProcessor {
      */
     void beforeQuery(BaseQuery query);
 
-    static void main(String[] args) {
-        System.out.println(String.format("", "test"));
-    }
 
 }
