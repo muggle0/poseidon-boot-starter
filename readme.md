@@ -10,6 +10,8 @@
 
 本人的书：[muggle的书](https://muggle-book.gitee.io/)
 
+博客：muggle.javaboy.org
+
 框架集成功能：
 
 - 异常报警
