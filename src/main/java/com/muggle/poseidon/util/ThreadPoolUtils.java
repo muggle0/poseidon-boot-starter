@@ -22,6 +22,7 @@ public class ThreadPoolUtils {
 
     }
 
+    //  线程池工厂 thraedfactory 作用
     public static ThreadPoolExecutor buildDefaultPool(){
         ThreadPoolExecutor executor = new ThreadPoolExecutor(DEFAULT_POOL_SIEZ, DEFAULT_MAX_POOL_SIZE, DEFAULT_KEEP_ALIVE, TimeUnit.MINUTES,
                 new LinkedBlockingQueue(DEFAULT_QUEUE_SIZE), r -> null);
