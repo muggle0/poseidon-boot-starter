@@ -49,7 +49,7 @@ public class ThreadPoolUtils {
         threadPoolExecutor.execute(()->{
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>.");
         });
-//        threadPoolExecutor.
+        threadPoolExecutor.shutdown();
     }
 
 
