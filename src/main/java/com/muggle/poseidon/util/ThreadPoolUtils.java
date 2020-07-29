@@ -24,6 +24,12 @@ public class ThreadPoolUtils {
     }
 
     // 1. 线程池工厂 thraedfactory 作用 2. 四种handler
+    /**
+     * 1. AbortPolicy：丢弃任务并抛出 RejectedExecutionException 异常。（默认这种）
+     * 2. DiscardPolicy：也是丢弃任务，但是不抛出异常
+     * 3. DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+     * 4. CallerRunsPolicy：由调用线程处理该任务
+     * */
     public static ThreadPoolExecutor buildDefaultPool() {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(DEFAULT_POOL_SIEZ, DEFAULT_MAX_POOL_SIZE, DEFAULT_KEEP_ALIVE, TimeUnit.MINUTES,
                 new LinkedBlockingQueue(DEFAULT_QUEUE_SIZE), new NamedThreadFactory(DEFAULT_EXEUTOR_NAME),
