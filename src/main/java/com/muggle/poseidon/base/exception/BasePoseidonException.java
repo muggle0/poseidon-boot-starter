@@ -12,6 +12,9 @@ public abstract class BasePoseidonException extends RuntimeException {
     public BasePoseidonException(String message){
         super(message);
     }
+    public BasePoseidonException(Throwable e){
+        super(e);
+    }
 
     public abstract Integer getCode();
 
