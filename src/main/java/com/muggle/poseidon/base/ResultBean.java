@@ -1,10 +1,6 @@
 package com.muggle.poseidon.base;
 
-import com.muggle.poseidon.entity.AuthUrlPathDO;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @program: poseidon-cloud-starter
