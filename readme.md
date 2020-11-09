@@ -438,3 +438,5 @@ com.username.lestener.ExceptionListener
 微信: b3duZXJhbmRzZWxm（base64解码后便是）
 
 喜欢的朋友 starter 一下吧，撸码不容易
+
+## 感谢JetBrains给我白嫖的机会，大家要用正版idea哦
