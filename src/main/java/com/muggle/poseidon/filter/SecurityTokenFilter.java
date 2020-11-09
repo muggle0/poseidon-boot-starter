@@ -1,6 +1,13 @@
 package com.muggle.poseidon.filter;
 
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import com.muggle.poseidon.auto.PoseidonSecurityProperties;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.properties.SecurityMessageProperties;
@@ -14,13 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 /**
  * @program: poseidon-cloud-starter
  * @description: token认证填充用户信息
@@ -32,21 +32,24 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
 
     private SecurityStore securityStore;
 
-    private AntPathMatcher pathMatcher=new AntPathMatcher();
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    private  PoseidonSecurityProperties properties;
+    private PoseidonSecurityProperties properties;
 
 
-    /** logger */
+    /**
+     * logger
+     */
     private static final Logger log = LoggerFactory.getLogger(SecurityTokenFilter.class);
 
-    public SecurityTokenFilter(SecurityStore securityStore,PoseidonSecurityProperties properties) {
-        this.properties=properties;
+    public SecurityTokenFilter(SecurityStore securityStore, PoseidonSecurityProperties properties) {
+        this.properties = properties;
         this.securityStore = securityStore;
     }
 
     /**
      * 该过滤器会首先从请求头中获取token，如果获取失败则会从cookie 中获取token，key都是 token
+     *
      * @param httpServletRequest
      * @param httpServletResponse
      * @param filterChain
@@ -55,52 +58,53 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
      * @throws AccessDeniedException
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException ,AccessDeniedException{
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException, AccessDeniedException {
         log.debug(">>>>>>>>>>>>>>>>>>>>>>> 开始校验token <<<<<<<<<<<<<<<<<<<<<");
         String token = httpServletRequest.getHeader("token");
         Cookie[] cookies = httpServletRequest.getCookies();
-        String cookieToken=null;
-        if (cookies != null){
+        String cookieToken = null;
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
-                    cookieToken=cookie.getValue();
+                    cookieToken = cookie.getValue();
                 }
             }
         }
-        if (token==null&&cookieToken==null){
-            filterChain.doFilter(httpServletRequest,httpServletResponse);
+        if (token == null && cookieToken == null) {
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 
-        UserDetails userDetails =null;
+        UserDetails userDetails = null;
         try {
-            userDetails = securityStore.getUserdetail(token==null?cookieToken:token);
-        }catch (BasePoseidonCheckException e){
-            log.error("》》》》 用户凭证为badToken {}",e.getMessage());
+            userDetails = securityStore.getUserdetail(token == null ? cookieToken : token);
+        } catch (BasePoseidonCheckException e) {
+            log.error("》》》》 用户凭证为badToken {}", e.getMessage());
             SecurityContextHolder.getContext().setAuthentication(getBadToken(e.getMessage()));
-            filterChain.doFilter(httpServletRequest,httpServletResponse);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
-        }catch (Exception e){
-            log.error("》》》》 token 解析异常：",e);
+        } catch (Exception e) {
+            log.error("》》》》 token 解析异常：", e);
             SecurityContextHolder.getContext().setAuthentication(getBadToken("请求信息非法，无法解析"));
-            filterChain.doFilter(httpServletRequest,httpServletResponse);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 
-        if (userDetails==null){
-            log.error("该用户不存在， token:{}",token );
+        if (userDetails == null) {
+            log.error("该用户不存在， token:{}", token);
             SecurityContextHolder.getContext().setAuthentication(getBadToken("该用户不存在，请重新登录"));
-            filterChain.doFilter(httpServletRequest,httpServletResponse);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
-        UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword(),userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         authenticationToken.setDetails(userDetails);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         log.debug("》》》》 填充token");
-        filterChain.doFilter(httpServletRequest,httpServletResponse);
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
-    private UsernamePasswordAuthenticationToken getBadToken(String message){
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(SecurityMessageProperties.BAD_TOKEN,null,null);
+
+    private UsernamePasswordAuthenticationToken getBadToken(String message) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(SecurityMessageProperties.BAD_TOKEN, null, null);
         authenticationToken.setDetails(message);
         return authenticationToken;
     }

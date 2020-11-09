@@ -16,7 +16,9 @@ import org.springframework.context.annotation.Configuration;
 //@ConditionalOnProperty(TokenService.class)
 public class ExpansibilityConfig {
 
-    /** logger */
+    /**
+     * logger
+     */
     private static final Logger log = LoggerFactory.getLogger(ExpansibilityConfig.class);
 
 

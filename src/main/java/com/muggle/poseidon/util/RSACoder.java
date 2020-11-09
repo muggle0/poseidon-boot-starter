@@ -10,7 +10,12 @@ package com.muggle.poseidon.util;
 
 
 import javax.crypto.Cipher;
-import java.security.*;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -70,7 +75,7 @@ public class RSACoder {
      * 私钥加密
      *
      * @param data 待加密数据
-     * @param key       密钥
+     * @param key  密钥
      * @return byte[] 加密数据
      */
     public static byte[] encryptByPrivateKey(byte[] data, byte[] key) throws Exception {
@@ -90,7 +95,7 @@ public class RSACoder {
      * 公钥加密
      *
      * @param data 待加密数据
-     * @param key       密钥
+     * @param key  密钥
      * @return byte[] 加密数据
      */
     public static byte[] encryptByPublicKey(byte[] data, byte[] key) throws Exception {

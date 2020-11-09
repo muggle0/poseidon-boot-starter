@@ -9,7 +9,7 @@ package com.muggle.poseidon.base.exception;
 
 public abstract class BasePoseidonException extends RuntimeException {
 
-    public BasePoseidonException(String message){
+    public BasePoseidonException(String message) {
         super(message);
     }
 

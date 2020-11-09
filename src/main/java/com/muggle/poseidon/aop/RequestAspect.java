@@ -1,5 +1,7 @@
 package com.muggle.poseidon.aop;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.muggle.poseidon.annotation.InterfaceAction;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
@@ -10,15 +12,16 @@ import com.muggle.poseidon.util.UserInfoUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -32,10 +35,11 @@ public class RequestAspect {
 
     private RequestLogProcessor logProcessor;
 
-    public RequestAspect(DistributedLocker locker,RequestLogProcessor logProcessor){
-        this.logProcessor=logProcessor;
-        this.locker=locker;
+    public RequestAspect(DistributedLocker locker, RequestLogProcessor logProcessor) {
+        this.logProcessor = logProcessor;
+        this.locker = locker;
     }
+
     private static final Log log = LogFactory.getLog(RequestAspect.class);
 
     @Pointcut("@annotation(com.muggle.poseidon.annotation.InterfaceAction)")
@@ -58,16 +62,16 @@ public class RequestAspect {
         String userMessage = "用户名：%s";
         try {
             UserDetails userInfo = UserInfoUtils.getUserInfo();
-            userMessage=String.format(userMessage,userInfo==null?"用户未登录":userInfo.getUsername());
+            userMessage = String.format(userMessage, userInfo == null ? "用户未登录" : userInfo.getUsername());
         } catch (BasePoseidonCheckException e) {
-            userMessage=String.format(userMessage,"非法的登录用户");
+            userMessage = String.format(userMessage, "非法的登录用户");
         }
-        log.info("》》》》》》 请求日志   "+userMessage+" url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
+        log.info("》》》》》》 请求日志   " + userMessage + " url=" + request.getRequestURI() + "method=" + request.getMethod() + "ip=" + request.getRemoteAddr()
                 + "host=" + request.getRemoteHost() + "port=" + request.getRemotePort()
                 + "classMethod=" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
-                + "paramters [ " + stringBuilder.toString()+" ]");
-        if (logProcessor !=null){
-            logProcessor.recordBefore(request,joinPoint.getArgs());
+                + "paramters [ " + stringBuilder.toString() + " ]");
+        if (logProcessor != null) {
+            logProcessor.recordBefore(request, joinPoint.getArgs());
         }
     }
 
@@ -77,37 +81,36 @@ public class RequestAspect {
     private void verifyIdempotent(JoinPoint joinPoint) {
         InterfaceAction annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(InterfaceAction.class);
         boolean idempotent = annotation.Idempotent();
-        if (idempotent){
+        if (idempotent) {
             log.debug(">>>>>>>>>>>>>>>>>>>>>>> 幂等操作 <<<<<<<<<<<<<<<<<<<<<");
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String requestURI = request.getRequestURI();
             String remoteAddr = RequestUtils.getIP(request);
-            log.info(String.format("请求进入幂等方法，开始尝试上锁 uri: %s ip:%s",requestURI,remoteAddr));
+            log.info(String.format("请求进入幂等方法，开始尝试上锁 uri: %s ip:%s", requestURI, remoteAddr));
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username="notSignin";
+            String username = "notSignin";
             if (authentication != null && authentication.getPrincipal() == null) {
-                username= authentication.getPrincipal().toString();
+                username = authentication.getPrincipal().toString();
             }
-            String key="lock:idempotent:"+request.getRequestURI()+":"+username+":"+RequestUtils.getIP(request);
+            String key = "lock:idempotent:" + request.getRequestURI() + ":" + username + ":" + RequestUtils.getIP(request);
             long expertime = annotation.expertime();
-            log.info("冪等上锁 key :"+key);
+            log.info("冪等上锁 key :" + key);
             boolean trylock = locker.trylock(key, expertime);
-            if (!trylock){
+            if (!trylock) {
                 String message = annotation.message();
-                log.info(">>>>>>>>>>>>>>>>>>>>>> 获取幂等锁获取锁失败 key:"+key+"  <<<<<<<<<<<<<<<<<<<<<<<");
+                log.info(">>>>>>>>>>>>>>>>>>>>>> 获取幂等锁获取锁失败 key:" + key + "  <<<<<<<<<<<<<<<<<<<<<<<");
                 throw new SimplePoseidonException(message);
             }
         }
     }
 
 
-
     @AfterReturning(pointcut = "request()", returning = "result")
     public void doAfterReturning(JoinPoint joinPoint, Object result) {
         log.debug(">>>>>>>>>>>>>>>>>>>>>> 操作日志，返回值切面执行  <<<<<<<<<<<<<<<<<<<<<<< ");
-        if (logProcessor!=null){
-            logProcessor.recordAfterReturning(result,joinPoint.getArgs());
+        if (logProcessor != null) {
+            logProcessor.recordAfterReturning(result, joinPoint.getArgs());
         }
     }
 }

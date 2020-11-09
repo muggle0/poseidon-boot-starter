@@ -1,12 +1,10 @@
 package com.muggle.poseidon.store;
 
-import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
-import org.springframework.cglib.core.internal.Function;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface SecurityStore {
 
@@ -34,21 +32,21 @@ public interface SecurityStore {
     String signUserMessage(UserDetails userDetails);
 
     /**
-    * @author muggle
-    * @Description: 清除用户登录信息（登出）
-    * @Param:
-    * @return:
-    * @date 2019/11/5 11:42
-    */
+     * @author muggle
+     * @Description: 清除用户登录信息（登出）
+     * @Param:
+     * @return:
+     * @date 2019/11/5 11:42
+     */
     Boolean cleanToken(String username);
 
     /**
-    * @author muggle
-    * @Description: 保存放行的url
-    * @Param:
-    * @return:
-    * @date 2019/11/5 11:44
-    */
+     * @author muggle
+     * @Description: 保存放行的url
+     * @Param:
+     * @return:
+     * @date 2019/11/5 11:44
+     */
     static void saveAccessPath(List<String> paths) {
         ACCESS_PATHS.addAll(paths);
     }

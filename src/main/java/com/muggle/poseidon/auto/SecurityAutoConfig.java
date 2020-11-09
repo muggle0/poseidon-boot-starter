@@ -1,5 +1,10 @@
 package com.muggle.poseidon.auto;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.muggle.poseidon.adapter.PoseidonAuthConfigAdapter;
 import com.muggle.poseidon.aop.RequestAspect;
 import com.muggle.poseidon.base.DistributedLocker;
@@ -33,9 +38,6 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.lang.annotation.Annotation;
-import java.util.*;
-
 /**
  * @program: poseidon-cloud-starter
  * @description: 自动化配置核心类
@@ -61,21 +63,22 @@ public class SecurityAutoConfig {
     RequestLogProcessor logProcessor;
 
     @Bean
-    public PoseidonAuthConfigAdapter getAdapter(TokenService tokenService, SecurityStore securityStore){
+    public PoseidonAuthConfigAdapter getAdapter(TokenService tokenService, SecurityStore securityStore) {
         log.debug(">>>>>>>>>>>>>>>>>>>>>>> 开启自动化配置 <<<<<<<<<<<<<<<<<<<<<");
-        if (securityStore==null){
+        if (securityStore == null) {
             throw new SimplePoseidonException("请先注册 securityStore");
         }
-        return new PoseidonAuthConfigAdapter(tokenService,securityStore,properties);
+        return new PoseidonAuthConfigAdapter(tokenService, securityStore, properties);
     }
 
     /**
      * 测试和生产环境生效
+     *
      * @param tokenService
      * @return
      */
     @Bean
-    @Profile({"uat","sit","online","refresh"})
+    @Profile({"uat", "sit", "online", "refresh"})
     public CommandLineRunner init(final TokenService tokenService) {
         return new CommandLineRunner() {
             @Override
@@ -87,8 +90,10 @@ public class SecurityAutoConfig {
         };
     }
 
-    /** 读取所有的url 并交给tokenService.saveUrlInfo处理 **/
-    public  List<AuthUrlPathDO> getAllURL() {
+    /**
+     * 读取所有的url 并交给tokenService.saveUrlInfo处理
+     **/
+    public List<AuthUrlPathDO> getAllURL() {
         List<AuthUrlPathDO> resultList = new ArrayList<>();
 
         RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
@@ -148,9 +153,9 @@ public class SecurityAutoConfig {
     @Bean
     @Autowired
     @ConditionalOnBean(DistributedLocker.class)
-    public RequestAspect getLogAspect(DistributedLocker distributedLocker){
+    public RequestAspect getLogAspect(DistributedLocker distributedLocker) {
         log.debug(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
-        return new RequestAspect(distributedLocker,logProcessor);
+        return new RequestAspect(distributedLocker, logProcessor);
     }
 
 
@@ -161,7 +166,7 @@ public class SecurityAutoConfig {
             @Override
             public void customize(ConfigurableServletWebServerFactory factory) {
                 log.debug(">>>>>>>>>>>>>>>>>>>>>>> 错误页面配置——404（/public/notfound） 500（/error_message） <<<<<<<<<<<<<<<<<<<<<");
-                factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,"/public/notfound"),new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR,"/error_message"));
+                factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/public/notfound"), new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error_message"));
             }
         };
     }

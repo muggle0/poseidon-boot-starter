@@ -1,11 +1,10 @@
 package com.muggle.poseidon.base;
 
-import com.github.pagehelper.PageHelper;
-import org.springframework.cglib.core.internal.Function;
-import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 import java.util.Map;
+
+import com.github.pagehelper.PageHelper;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @Description:
@@ -30,7 +29,7 @@ public abstract class BaseQuery {
 
     public void init() {
         PageHelper.startPage(startPage, pageSize);
-        if (!CollectionUtils.isEmpty(orderBy)){
+        if (!CollectionUtils.isEmpty(orderBy)) {
             String join = String.join(",", orderBy);
             PageHelper.orderBy(join + " " + sort);
         }
@@ -38,12 +37,14 @@ public abstract class BaseQuery {
 
     /**
      * sql 转化
+     *
      * @param
      */
     public abstract void processSql();
 
     /**
      * 在mybati中使用sql注入 形如 where ${finalSql}
+     *
      * @return
      */
     public abstract String getFinalSql();

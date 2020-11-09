@@ -1,5 +1,7 @@
 package com.muggle.poseidon.handler.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.muggle.poseidon.base.ResultBean;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
 import com.muggle.poseidon.base.exception.BasePoseidonException;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 @ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
@@ -43,8 +43,8 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {BasePoseidonException.class})
     public ResultBean poseidonExceptionHandler(BasePoseidonException e, HttpServletRequest req) {
-        log.error("业务异常,错误码：{}",e.getCode(),e);
-        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?5001:e.getCode());
+        log.error("业务异常,错误码：{}", e.getCode(), e);
+        ResultBean error = ResultBean.error(e.getMessage(), e.getCode() == null ? 5001 : e.getCode());
         return error;
     }
 
@@ -57,20 +57,21 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResultBean methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest req) {
-        log.error("参数未通过校验",e);
+        log.error("参数未通过校验", e);
         ResultBean error = ResultBean.error(e.getBindingResult().getFieldError().getDefaultMessage());
         return error;
     }
 
     /**
      * BeanPropertyBindingResult
-     * */
+     */
     @ExceptionHandler(value = {BindException.class})
     public ResultBean beanPropertyBindingResult(BindException e, HttpServletRequest req) {
-        log.error("参数未通过校验",e);
+        log.error("参数未通过校验", e);
         ResultBean error = ResultBean.error(e.getFieldError().getDefaultMessage());
         return error;
     }
+
     /**
      * 错误的请求方式
      *
@@ -80,7 +81,7 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
     public ResultBean notsupported(Exception e, HttpServletRequest req) {
-        log.error("错误的请求方式",e);
+        log.error("错误的请求方式", e);
         ResultBean error = ResultBean.error("错误的请求方式");
         return error;
     }
@@ -94,7 +95,7 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {NoHandlerFoundException.class})
     public ResultBean notFoundUrl(Exception e, HttpServletRequest req) {
-        log.error("请求路径不存在",e);
+        log.error("请求路径不存在", e);
         ResultBean error = ResultBean.error("请求路径不存在");
         return error;
     }
@@ -109,14 +110,15 @@ public class WebResultHandler {
      */
     @ExceptionHandler(value = {BasePoseidonCheckException.class})
     public ResultBean checked(BasePoseidonCheckException e, HttpServletRequest req) {
-        log.error("自定义异常，错误码:{}",e.getCode(),e);
-        ResultBean error = ResultBean.error(e.getMessage(),e.getCode()==null?5001:e.getCode());
+        log.error("自定义异常，错误码:{}", e.getCode(), e);
+        ResultBean error = ResultBean.error(e.getMessage(), e.getCode() == null ? 5001 : e.getCode());
         return error;
     }
 
     /**
      * 未知异常，需要通知到管理员,对于线上未知的异常，我们应该严肃处理：先将消息传给MQ中心(该平台未实现) 然后日志写库
      * 这里的处理方式是抛出事件
+     *
      * @param e
      * @param req
      * @return
@@ -125,13 +127,13 @@ public class WebResultHandler {
     public ResultBean exceptionHandler(Exception e, HttpServletRequest req) {
         try {
             UserDetails userInfo = UserInfoUtils.getUserInfo();
-            log.error("系统异常：" + req.getMethod() + req.getRequestURI()+" user: "+(userInfo==null?"无用户信息":userInfo.toString()) , e);
-            ExceptionEvent exceptionEvent = new ExceptionEvent(String.format("系统异常: [ %s ] 时间戳： [%d]  ", e.getMessage(),System.currentTimeMillis()), this);
+            log.error("系统异常：" + req.getMethod() + req.getRequestURI() + " user: " + (userInfo == null ? "无用户信息" : userInfo.toString()), e);
+            ExceptionEvent exceptionEvent = new ExceptionEvent(String.format("系统异常: [ %s ] 时间戳： [%d]  ", e.getMessage(), System.currentTimeMillis()), this);
             applicationContext.publishEvent(exceptionEvent);
-            return ResultBean.error("系统异常",500);
-        }catch (Exception err){
-            log.error("紧急！！！ 严重的异常",err);
-            return ResultBean.error("系统发生严重的错误",500);
+            return ResultBean.error("系统异常", 500);
+        } catch (Exception err) {
+            log.error("紧急！！！ 严重的异常", err);
+            return ResultBean.error("系统发生严重的错误", 500);
         }
     }
 }

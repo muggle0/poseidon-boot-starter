@@ -1,9 +1,17 @@
 package com.muggle.poseidon.adapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.muggle.poseidon.auto.PoseidonSecurityProperties;
 import com.muggle.poseidon.filter.SecurityLoginFilter;
 import com.muggle.poseidon.filter.SecurityTokenFilter;
-import com.muggle.poseidon.handler.security.*;
+import com.muggle.poseidon.handler.security.PoseidonAccessDeniedHandler;
+import com.muggle.poseidon.handler.security.PoseidonAuthenticationFailureHandler;
+import com.muggle.poseidon.handler.security.PoseidonAuthenticationSuccessHandler;
+import com.muggle.poseidon.handler.security.PoseidonLoginUrlAuthenticationEntryPoint;
+import com.muggle.poseidon.handler.security.PoseidonLogoutSuccessHandler;
 import com.muggle.poseidon.manager.PoseidonWebExpressionVoter;
 import com.muggle.poseidon.properties.SecurityMessageProperties;
 import com.muggle.poseidon.service.TokenService;
@@ -22,10 +30,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @program: poseidon-cloud-starter
@@ -62,7 +66,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
 
 //        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html","/**/*.css","/**/*.js"};
-        if (properties.getStaticPath()==null) {
+        if (properties.getStaticPath() == null) {
             properties.setStaticPath(new ArrayList<>());
         }
         String[] paths = new String[properties.getStaticPath().size()];
@@ -82,7 +86,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
 
         if (ignorePath == null) {
             properties.setIgnorePath(new ArrayList<>());
-            ignorePath =  properties.getIgnorePath();
+            ignorePath = properties.getIgnorePath();
         }
         String[] paths = new String[ignorePath.size()];
         ignorePath.toArray(paths);
@@ -110,7 +114,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
     private AccessDecisionManager accessDecisionManager() {
         List<AccessDecisionVoter<? extends Object>> decisionVoters
                 = Arrays.asList(
-                new PoseidonWebExpressionVoter(tokenService,properties));
+                new PoseidonWebExpressionVoter(tokenService, properties));
         return new UnanimousBased(decisionVoters);
 
     }

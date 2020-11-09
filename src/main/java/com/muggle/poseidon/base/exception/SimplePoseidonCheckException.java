@@ -12,12 +12,12 @@ public class SimplePoseidonCheckException extends BasePoseidonCheckException {
 
     public SimplePoseidonCheckException(String message) {
         super(message);
-        this.code=5001;
+        this.code = 5001;
     }
 
-    public SimplePoseidonCheckException(String message,Integer code) {
+    public SimplePoseidonCheckException(String message, Integer code) {
         super(message);
-        this.code=code;
+        this.code = code;
     }
 
     @Override

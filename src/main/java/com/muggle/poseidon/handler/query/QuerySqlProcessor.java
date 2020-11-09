@@ -12,12 +12,14 @@ public interface QuerySqlProcessor {
 
     /**
      * 返回值处理逻辑
+     *
      * @param query
      */
     void afterReturningQuery(ResultBean query);
 
     /**
      * aop执行，调用自定义query处理逻辑
+     *
      * @param query
      */
     void beforeQuery(BaseQuery query);

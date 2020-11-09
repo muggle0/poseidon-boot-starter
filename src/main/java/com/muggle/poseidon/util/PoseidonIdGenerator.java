@@ -45,19 +45,21 @@ public abstract class PoseidonIdGenerator {
 
     /**
      * 获取一个流水单号
+     *
      * @return
      */
-    public abstract String getNextSerialNumber(String perfix,String mark,int size);
+    public abstract String getNextSerialNumber(String perfix, String mark, int size);
 
 
     /**
      * 获取多个流水号
+     *
      * @param perfix
      * @param mark
      * @param length
      * @return
      */
-    public abstract List<String> getBatchSerialNumber(String perfix, String mark, int length,int size);
+    public abstract List<String> getBatchSerialNumber(String perfix, String mark, int length, int size);
 
     //
     public PoseidonIdGenerator(long datacenterId, long machineId) {

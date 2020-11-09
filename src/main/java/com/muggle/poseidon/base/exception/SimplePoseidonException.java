@@ -7,18 +7,18 @@ package com.muggle.poseidon.base.exception;
  * @create: 2019-11-05
  **/
 
-public class SimplePoseidonException extends BasePoseidonException{
+public class SimplePoseidonException extends BasePoseidonException {
 
     private Integer code;
 
-    public SimplePoseidonException(String message,Integer code) {
+    public SimplePoseidonException(String message, Integer code) {
         super(message);
-        this.code=code;
+        this.code = code;
     }
 
     public SimplePoseidonException(String message) {
         super(message);
-        this.code=5001;
+        this.code = 5001;
     }
 
     @Override

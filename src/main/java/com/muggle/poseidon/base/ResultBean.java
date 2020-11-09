@@ -41,44 +41,44 @@ public class ResultBean<T> implements Serializable {
         this.data = data;
     }
 
-    private ResultBean(String message, Integer code, T data){
-        this.code=code;
-        this.message=message;
-        this.data=data;
+    private ResultBean(String message, Integer code, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
     }
 
-    private ResultBean(String message,Integer code){
-        this.code=code;
-        this.message=message;
+    private ResultBean(String message, Integer code) {
+        this.code = code;
+        this.message = message;
     }
 
 
-    public  static <T> ResultBean<T> getInstance(String message,Integer code,T data){
-        return new ResultBean<>(message,code,data);
+    public static <T> ResultBean<T> getInstance(String message, Integer code, T data) {
+        return new ResultBean<>(message, code, data);
     }
 
-    public static <T> ResultBean<T> getInstance(String message,Integer code){
-        return new ResultBean<>(message,code);
+    public static <T> ResultBean<T> getInstance(String message, Integer code) {
+        return new ResultBean<>(message, code);
     }
 
-    public static<T> ResultBean<T> success(){
-        return new ResultBean<>("请求成功",200);
+    public static <T> ResultBean<T> success() {
+        return new ResultBean<>("请求成功", 200);
     }
 
-    public static<T> ResultBean<T> success(String message){
-        return new ResultBean<>(message,200);
+    public static <T> ResultBean<T> success(String message) {
+        return new ResultBean<>(message, 200);
     }
 
-    public static<T> ResultBean<T> error(String message){
-        return new ResultBean<>(message,5001);
+    public static <T> ResultBean<T> error(String message) {
+        return new ResultBean<>(message, 5001);
     }
 
-    public static<T> ResultBean<T> error(String message,Integer code){
-        return new ResultBean<>(message,code);
+    public static <T> ResultBean<T> error(String message, Integer code) {
+        return new ResultBean<>(message, code);
     }
 
-    public static<T> ResultBean<T> successData(T data){
-        return new ResultBean<>("请求成功",200,data);
+    public static <T> ResultBean<T> successData(T data) {
+        return new ResultBean<>("请求成功", 200, data);
     }
 
 

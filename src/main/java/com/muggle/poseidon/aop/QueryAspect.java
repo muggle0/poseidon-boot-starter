@@ -44,7 +44,7 @@ public class QueryAspect {
             if (arg instanceof BaseQuery) {
                 BaseQuery query = (BaseQuery) arg;
                 query.init();
-                if (sqlProcessor!=null){
+                if (sqlProcessor != null) {
                     sqlProcessor.beforeQuery(query);
                 }
                 query.processSql();
@@ -54,12 +54,12 @@ public class QueryAspect {
 
     @AfterReturning(pointcut = "query()", returning = "result")
     public void doAfterReturning(JoinPoint joinPoint, Object result) {
-        if (result==null){
+        if (result == null) {
             return;
         }
         if (result instanceof ResultBean) {
             Object data = ((ResultBean) result).getData();
-            if (sqlProcessor!=null){
+            if (sqlProcessor != null) {
                 sqlProcessor.afterReturningQuery((ResultBean) result);
             }
             if (data instanceof Page) {

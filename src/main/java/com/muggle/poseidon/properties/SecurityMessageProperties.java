@@ -8,10 +8,10 @@ package com.muggle.poseidon.properties;
  **/
 
 public interface SecurityMessageProperties {
-    String BAD_TOKEN="BAD_TOKEN";
-    String SUBJECT ="POSEIDON_CLAIM";
-    String ISSUER ="security";
+    String BAD_TOKEN = "BAD_TOKEN";
+    String SUBJECT = "POSEIDON_CLAIM";
+    String ISSUER = "security";
     String RANDOM = "RANDOM";
-    String LOGOUT ="/logout" ;
+    String LOGOUT = "/logout";
     String LOGIN_URL = "/sign_in";
 }

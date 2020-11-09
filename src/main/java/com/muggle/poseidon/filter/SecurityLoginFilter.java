@@ -1,5 +1,8 @@
 package com.muggle.poseidon.filter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
 import com.muggle.poseidon.service.TokenService;
 import com.muggle.poseidon.store.SecurityStore;
@@ -11,9 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @program: poseidon-cloud-starter
@@ -28,7 +28,8 @@ public class SecurityLoginFilter extends UsernamePasswordAuthenticationFilter {
     private SecurityStore securityStore;
 
 
-    static Logger logger= LoggerFactory.getLogger(SecurityLoginFilter.class);
+    static Logger logger = LoggerFactory.getLogger(SecurityLoginFilter.class);
+
     public SecurityLoginFilter(TokenService tokenService, SecurityStore securityStore) {
         this.tokenService = tokenService;
         this.securityStore = securityStore;
@@ -36,14 +37,14 @@ public class SecurityLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        try{
+        try {
             UserDetails login = tokenService.login(request, response);
             String token = securityStore.signUserMessage(login);
-            return  new UsernamePasswordAuthenticationToken(token, "");
-        }catch (SimplePoseidonCheckException e){
+            return new UsernamePasswordAuthenticationToken(token, "");
+        } catch (SimplePoseidonCheckException e) {
             throw new AuthenticationServiceException(e.getMessage());
-        }catch (Exception e){
-            logger.error("系统异常：",e);
+        } catch (Exception e) {
+            logger.error("系统异常：", e);
             throw new AuthenticationServiceException("系统异常");
         }
 

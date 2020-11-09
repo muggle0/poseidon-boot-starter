@@ -1,16 +1,16 @@
 package com.muggle.poseidon.handler.security;
 
-import com.muggle.poseidon.store.SecurityStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import com.muggle.poseidon.store.SecurityStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * @program: poseidon
@@ -28,9 +28,10 @@ public class PoseidonLogoutSuccessHandler implements LogoutSuccessHandler {
     }
 
     private final static Logger log = LoggerFactory.getLogger("PoseidonLogoutSuccessHandler");
+
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        if (authentication==null){
+        if (authentication == null) {
             response.setContentType("application/json;charset=UTF-8");
             final PrintWriter writer = response.getWriter();
             writer.write("{\"code\":401,\"message\":\"用户未登录\"}");
@@ -42,17 +43,17 @@ public class PoseidonLogoutSuccessHandler implements LogoutSuccessHandler {
         try {
             Boolean success = securityStore.cleanToken((String) principal);
             if (success) {
-                log.info("用户登出, token: {}",principal);
+                log.info("用户登出, token: {}", principal);
                 writer.write("{\"code\":\"200\",\"msg\":\"登出成功\"}");
                 writer.close();
-            }else {
-                log.info("用户登出失败 token：{}",principal);
+            } else {
+                log.info("用户登出失败 token：{}", principal);
                 writer.write("{\"code\":\"5001\",\"msg\":\"登出失败，请重试\"}");
             }
-        }catch (Exception e){
-            log.error("登出失败： ",e);
-            writer.write("{\"code\":\"5001\",\"message\":\""+e.getMessage()+"\"}");
-        }finally {
+        } catch (Exception e) {
+            log.error("登出失败： ", e);
+            writer.write("{\"code\":\"5001\",\"message\":\"" + e.getMessage() + "\"}");
+        } finally {
             writer.close();
         }
     }

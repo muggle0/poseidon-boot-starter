@@ -22,17 +22,19 @@ public interface DistributedLocker {
 
     /**
      * 上锁，阻塞或自旋
+     *
      * @param key
      * @param express
      * @throws BasePoseidonCheckException
      */
-    void dolock(String key,String value, Long express) throws BasePoseidonCheckException;
+    void dolock(String key, String value, Long express) throws BasePoseidonCheckException;
 
     /**
      * 解锁
+     *
      * @return
      */
-    boolean unlock(String key,String value);
+    boolean unlock(String key, String value);
 
     void clean(String key);
 
