@@ -5,7 +5,7 @@
 
     <groupId>com.muggle</groupId>
     <artifactId>poseidon-boot-starter</artifactId>
-    <version>0.0.1.Beta</version>
+    <version>1.0.0.Beta</version>
     <name>poseidon-cloud-starter</name>
     <description>poseidon 项目starter 包</description>
 
@@ -101,6 +101,32 @@
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <profile>
+            <id>rdc-private-repo</id>
+            <repositories>
+                <repository>
+                    <id>rdc-releases</id>
+                    <url>https://repo.rdc.aliyun.com/repository/135664-release-agaluw/</url>
+                </repository>
+                <repository>
+                    <id>rdc-snapshots</id>
+                    <url>https://repo.rdc.aliyun.com/repository/135664-snapshot-iPvOFe/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/135664-release-agaluw/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/135664-snapshot-iPvOFe/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <defaultGoal>compile</defaultGoal>
