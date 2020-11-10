@@ -16,4 +16,8 @@ public abstract class BasePoseidonCheckException extends Exception {
 
     public abstract Integer getCode();
 
+    public BasePoseidonCheckException(Throwable e){
+        super(e);
+    }
+
 }

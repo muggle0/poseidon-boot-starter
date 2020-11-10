@@ -1,6 +1,8 @@
 package com.muggle.poseidon.base;
 
+
 import java.io.Serializable;
+
 
 /**
  * @program: poseidon-cloud-starter

@@ -1,5 +1,7 @@
 package com.muggle.poseidon.base.exception;
 
+import com.muggle.poseidon.base.ErrorCode;
+
 /**
  * @program: poseidon-cloud-starter
  * @description: 通用业务异常
@@ -19,6 +21,16 @@ public class SimplePoseidonException extends BasePoseidonException {
     public SimplePoseidonException(String message) {
         super(message);
         this.code = 5001;
+    }
+
+    public SimplePoseidonException(Throwable e){
+        super(e);
+        this.code=5001;
+    }
+
+    public SimplePoseidonException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.code=errorCode.getCode();
     }
 
     @Override

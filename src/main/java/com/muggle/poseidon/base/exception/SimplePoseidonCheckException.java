@@ -20,6 +20,11 @@ public class SimplePoseidonCheckException extends BasePoseidonCheckException {
         this.code = code;
     }
 
+    public SimplePoseidonCheckException(Throwable e) {
+        super(e);
+        this.code=5001;
+    }
+
     @Override
     public Integer getCode() {
         return code;

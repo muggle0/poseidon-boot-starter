@@ -58,7 +58,7 @@ mvn install
  <dependency>
     <groupId>com.muggle</groupId>
     <artifactId>poseidon-boot-starter</artifactId>
-    <version>0.0.1.Alpha</version>
+    <version>0.0.1.Beta</version>
  </dependency>
 ```
 第三步开启自动化配置并注册 `tokenService` 和 `securityStore`
