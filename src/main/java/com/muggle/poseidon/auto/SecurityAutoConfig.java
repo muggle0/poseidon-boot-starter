@@ -25,6 +25,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -79,10 +80,14 @@ public class SecurityAutoConfig {
      */
     @Bean
     @Profile({"uat", "sit", "online", "refresh"})
-    public CommandLineRunner init(final TokenService tokenService) {
+    public CommandLineRunner init(final TokenService tokenService, ApplicationContext context) {
         return new CommandLineRunner() {
             @Override
             public void run(String... strings) throws Exception {
+                String property = context.getEnvironment().getProperty("log.dir");
+                if (property==null){
+                    throw new SimplePoseidonException(">>>>>>>>>>>>>>>>>>>>>>> application-log.dir 未配置 <<<<<<<<<<<<<<<<<<<<<");
+                }
                 log.debug(">>>>>>>>>>>>>>>>>>>>>>> 权限系统开机任务执行 <<<<<<<<<<<<<<<<<<<<<");
                 List<AuthUrlPathDO> allURL = getAllURL();
                 tokenService.processUrl(allURL);
