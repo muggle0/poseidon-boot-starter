@@ -96,7 +96,12 @@ public class RequestAspect {
             String key = "lock:idempotent:" + request.getRequestURI() + ":" + username + ":" + RequestUtils.getIP(request);
             long expertime = annotation.expertime();
             log.info("冪等上锁 key :" + key);
-            boolean trylock = locker.tryLock(key, expertime);
+            boolean trylock = false;
+            try {
+                trylock = locker.tryLock(key, expertime);
+            } catch (InterruptedException e) {
+                log.error(e);
+            }
             if (!trylock) {
                 String message = annotation.message();
                 log.info(">>>>>>>>>>>>>>>>>>>>>> 获取幂等锁获取锁失败 key:" + key + "  <<<<<<<<<<<<<<<<<<<<<<<");

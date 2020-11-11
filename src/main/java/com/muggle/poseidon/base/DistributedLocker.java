@@ -17,10 +17,15 @@ public interface DistributedLocker extends Lock {
      * @param expertime
      * @return
      */
-    boolean tryLock(String key, long expertime);
+    boolean tryLock(String key, long expertime) throws InterruptedException;
 
     /**
      * 阻塞
      */
-    boolean tryLock(String key);
+    void lock(String key);
+
+    /**
+     * 解锁
+     */
+    void unlock(String key);
 }

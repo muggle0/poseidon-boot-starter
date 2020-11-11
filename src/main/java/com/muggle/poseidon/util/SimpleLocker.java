@@ -16,13 +16,18 @@ public class SimpleLocker implements DistributedLocker {
 
 
     @Override
-    public boolean tryLock(String key, long expertime) {
+    public boolean tryLock(String key, long expertime) throws InterruptedException {
         return false;
     }
 
     @Override
-    public boolean tryLock(String key) {
-        return false;
+    public void lock(String key) {
+
+    }
+
+    @Override
+    public void unlock(String key) {
+
     }
 
     @Override
