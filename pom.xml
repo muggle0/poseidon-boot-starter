@@ -101,22 +101,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <profiles>
-        <profile>
-            <id>rdc-private-repo</id>
-            <repositories>
-                <repository>
-                    <id>rdc-releases</id>
-                    <url>https://repo.rdc.aliyun.com/repository/135664-release-agaluw/</url>
-                </repository>
-                <repository>
-                    <id>rdc-snapshots</id>
-                    <url>https://repo.rdc.aliyun.com/repository/135664-snapshot-iPvOFe/</url>
-                </repository>
-            </repositories>
-        </profile>
-    </profiles>
-
     <distributionManagement>
         <repository>
             <id>rdc-releases</id>
