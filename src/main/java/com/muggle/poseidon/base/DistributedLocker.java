@@ -18,4 +18,9 @@ public interface DistributedLocker extends Lock {
      * @return
      */
     boolean tryLock(String key, long expertime);
+
+    /**
+     * 阻塞
+     */
+    boolean tryLock(String key);
 }
