@@ -1,6 +1,6 @@
 package com.muggle.poseidon.base;
 
-import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
+import java.util.concurrent.locks.Lock;
 
 /**
  * @program: poseidon-cloud-starter
@@ -9,33 +9,13 @@ import com.muggle.poseidon.base.exception.BasePoseidonCheckException;
  * @create: 2019-12-31
  **/
 
-public interface DistributedLocker {
+public interface DistributedLocker extends Lock {
 
     /**
-     * \锁 非阻塞 单位：秒
-     *
+     * 锁
      * @param key
-     * @param express
+     * @param expertime
      * @return
      */
-    boolean trylock(String key, Long express);
-
-    /**
-     * 上锁，阻塞或自旋
-     *
-     * @param key
-     * @param express
-     * @throws BasePoseidonCheckException
-     */
-    void dolock(String key, String value, Long express) throws BasePoseidonCheckException;
-
-    /**
-     * 解锁
-     *
-     * @return
-     */
-    boolean unlock(String key, String value);
-
-    void clean(String key);
-
+    boolean tryLock(String key, long expertime);
 }
