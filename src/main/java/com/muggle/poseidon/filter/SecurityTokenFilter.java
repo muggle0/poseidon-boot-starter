@@ -85,7 +85,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
             return;
         } catch (Exception e) {
             log.error("》》》》 token 解析异常：", e);
-            SecurityContextHolder.getContext().setAuthentication(getBadToken("请求信息非法，无法解析"));
+            SecurityContextHolder.getContext().setAuthentication(getBadToken("请求信息非法，无法解析Token"));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
