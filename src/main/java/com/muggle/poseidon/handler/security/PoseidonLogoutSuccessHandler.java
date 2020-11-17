@@ -31,24 +31,23 @@ public class PoseidonLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter writer = response.getWriter();
         if (authentication == null) {
-            response.setContentType("application/json;charset=UTF-8");
-            final PrintWriter writer = response.getWriter();
             writer.write("{\"code\":401,\"message\":\"用户未登录\"}");
             writer.close();
             return;
         }
         Object principal = authentication.getPrincipal();
-        final PrintWriter writer = response.getWriter();
         try {
             Boolean success = securityStore.cleanToken((String) principal);
             if (success) {
                 log.info("用户登出, token: {}", principal);
-                writer.write("{\"code\":\"200\",\"msg\":\"登出成功\"}");
+                writer.write("{\"code\":200,\"message\":\"登出成功\"}");
                 writer.close();
             } else {
                 log.info("用户登出失败 token：{}", principal);
-                writer.write("{\"code\":\"5001\",\"msg\":\"登出失败，请重试\"}");
+                writer.write("{\"code\":5001,\"message\":\"登出失败，请重试\"}");
             }
         } catch (Exception e) {
             log.error("登出失败： ", e);
