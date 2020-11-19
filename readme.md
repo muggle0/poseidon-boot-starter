@@ -213,6 +213,8 @@ POSEIDON---- 2020-04-06 12:15:06 [http-nio-8080-exec-3] INFO  com.muggle.poseido
 
 可能有部分开发者对用户行为日志写库的需求，我这里未做支持，如果有该需求的开发者可以自己修改 `RequestAspect` 源码。
 
+如果你有对日志写库或者二次处理的需求，你只需要实现 `RequestLogProcessor` 接口并注册就能获取到请求与入参。
+
 ### 框架的基础设施
 
 框架收录了平时使用的 utlis 类在 `com.muggle.poseidon.util` 包下，使用者可以按需修改调整。`com.muggle.poseidon.base` 包下提供了基类，基础异常和 `ResultBean` 使用者请根据实际情况按需调整

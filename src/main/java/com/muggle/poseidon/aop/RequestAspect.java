@@ -26,7 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * @description: 日志aop类
- * @author: mozishu
+ * @author: muggle
  * @create: 2019-12-26 16:40
  */
 @Aspect
