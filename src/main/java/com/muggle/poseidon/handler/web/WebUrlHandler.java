@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.muggle.poseidon.base.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
 public class WebUrlHandler implements ErrorController {
+    @Value("${spring.application.name:poseidon-boot-starter}")
+    private String appName;
 
     public WebUrlHandler() {
         log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> WebUrlHandler 注册 <<<<<<<<<<<<<<<<<<<<");
@@ -41,7 +44,8 @@ public class WebUrlHandler implements ErrorController {
     @RequestMapping("/")
     public ResultBean getMessage() {
         log.debug("请求发起 访问路径： /");
-        return ResultBean.successData("poseidon-boot-starter");
+
+        return ResultBean.successData(appName);
     }
 
     @RequestMapping(value = "/error", produces = "application/json;charset=UTF-8")
