@@ -1,7 +1,7 @@
 package com.muggle.poseidon.base;
 
-public enum ErrorCode {
-    JSON_ERROR("json序列化异常",1001);
+public class ErrorCode {
+   public static final ErrorCode JSON_ERROR =new ErrorCode("json序列化异常",1001);
     private String message;
     private int code;
 

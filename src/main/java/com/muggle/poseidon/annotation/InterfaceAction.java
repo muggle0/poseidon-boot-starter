@@ -17,6 +17,10 @@ import java.lang.annotation.Target;
 public @interface InterfaceAction {
     String message() default "请求太频繁，请稍后再试";
 
+    /**
+     * 幂等
+     * @return
+     */
     boolean Idempotent() default false;
 
     long expertime() default 3L;
