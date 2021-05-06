@@ -442,3 +442,11 @@ com.username.lestener.ExceptionListener
 喜欢的朋友 starter 一下吧，撸码不容易
 
 ## 感谢JetBrains给我白嫖的机会，大家要用正版idea哦
+
+
+## 1.1.0 版本跌代
+
+### 跌代内容
+
+- 流控接入
+- 编辑锁
