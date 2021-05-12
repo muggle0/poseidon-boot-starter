@@ -1,5 +1,7 @@
 package com.muggle.poseidon.base;
 
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 /**
@@ -28,4 +30,18 @@ public interface DistributedLocker extends Lock {
      * 解锁
      */
     void unlock(String key);
+
+    /**
+     * 比较锁是否一致
+     */
+    boolean compareLock(Map<String,String> locker);
+
+    /**
+     *
+     * @param key 锁key
+     * @param value 锁 vaule
+     * @param time 时长
+     * @param unit 单位
+     */
+    boolean tryLock(String key, String value, int time, TimeUnit unit);
 }

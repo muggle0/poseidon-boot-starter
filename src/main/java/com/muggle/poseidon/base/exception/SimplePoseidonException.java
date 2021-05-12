@@ -33,6 +33,10 @@ public class SimplePoseidonException extends BasePoseidonException {
         this.code=errorCode.getCode();
     }
 
+    public SimplePoseidonException(String message, Exception e) {
+        super(message, e);
+    }
+
     @Override
     public Integer getCode() {
         return code;

@@ -31,6 +31,11 @@ public class SimpleLocker implements DistributedLocker {
     }
 
     @Override
+    public boolean compareLock(Map<String, String> locker) {
+        return false;
+    }
+
+    @Override
     public void lock() {
 
     }
