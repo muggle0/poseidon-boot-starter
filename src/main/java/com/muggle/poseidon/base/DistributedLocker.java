@@ -44,4 +44,12 @@ public interface DistributedLocker extends Lock {
      * @param unit 单位
      */
     boolean tryLock(String key, String value, int time, TimeUnit unit);
+
+    /**
+     * 解锁
+     * @param key
+     * @param vaule
+     * @return
+     */
+    boolean unlock(String key,String vaule);
 }

@@ -36,6 +36,16 @@ public class SimpleLocker implements DistributedLocker {
     }
 
     @Override
+    public boolean tryLock(String key, String value, int time, TimeUnit unit) {
+        return false;
+    }
+
+    @Override
+    public boolean unlock(String key, String vaule) {
+        return false;
+    }
+
+    @Override
     public void lock() {
 
     }
