@@ -25,9 +25,6 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
@@ -115,6 +112,11 @@
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-annotation-aspectj</artifactId>
             <version>1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.muggle</groupId>
+            <artifactId>poseidon-generator</artifactId>
+            <version>1.0.4-release</version>
         </dependency>
     </dependencies>
 
