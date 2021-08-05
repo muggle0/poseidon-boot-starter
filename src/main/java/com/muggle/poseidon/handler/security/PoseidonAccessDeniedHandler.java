@@ -32,25 +32,28 @@ public class PoseidonAccessDeniedHandler implements AccessDeniedHandler {
 
         if (SecurityMessageProperties.BAD_TOKEN.equals(authentication.getPrincipal())) {
             response.setContentType("application/json;charset=UTF-8");
-            PrintWriter writer = response.getWriter();
-            writer.write("{\"code\":403,\"message\":\"" + details.toString() + "\"}");
-            writer.close();
-            return;
+            try(PrintWriter writer = response.getWriter();) {
+                writer.write("{\"code\":403,\"message\":\"" + details.toString() + "\"}");
+                writer.close();
+                return;
+            }
         }
         if (details instanceof UserDetails) {
             if (!((UserDetails) details).isEnabled()) {
                 response.setContentType("application/json;charset=UTF-8");
-                PrintWriter writer = response.getWriter();
-                writer.write("{\"code\":403,\"message\":\"账号过期\"}");
-                writer.close();
-                return;
+                try(PrintWriter writer = response.getWriter();) {
+                    writer.write("{\"code\":403,\"message\":\"账号过期\"}");
+                    writer.close();
+                    return;
+                }
             }
             if (!((UserDetails) details).isAccountNonLocked()) {
                 response.setContentType("application/json;charset=UTF-8");
-                PrintWriter writer = response.getWriter();
-                writer.write("{\"code\":403,\"message\":\"账号被锁定\"}");
-                writer.close();
-                return;
+                try ( PrintWriter writer = response.getWriter()){
+                    writer.write("{\"code\":403,\"message\":\"账号被锁定\"}");
+                    writer.close();
+                    return;
+                }
             } else {
                 response.setContentType("application/json;charset=UTF-8");
                 PrintWriter writer = response.getWriter();
