@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>poseidon generator ui</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <table style="width: 600px;">
+        <tr>
+            <td>
+                <el-tag size="mini">数据库用户名：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.username"></el-input>
+            </td>
+            <td>
+                <el-tag size="mini">数据库密码：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.password"></el-input>
+            </td>
+        </tr>
+        <tr>
+
+        </tr>
+        <tr>
+            <td>
+                <el-tag size="mini">数据库连接地址：</el-tag>
+            </td>
+            <td colspan="4">
+                <el-input size="mini" v-model="msg.jdbcUrl"></el-input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <el-tag size="mini">项目包路径：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.projectPackage"></el-input>
+            </td>
+            <td>
+                <el-tag size="mini">项目包后缀：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.suffix"></el-input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <el-tag size="mini">父类包名：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.parentPack"></el-input>
+            </td>
+            <td>
+                <el-tag size="mini">是否支持swagger</el-tag>
+            </td>
+            <td>
+                <el-radio v-model="extendField.swaggerStr" label="true">支持</el-radio>
+                <el-radio v-model="extendField.swaggerStr" label="false">支持</el-radio>
+                <!--                <el-radio v-model="msg.swagger"  @change="getValue()" label=false>不支持</el-radio>-->
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <el-tag size="mini">模块名称：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.module"></el-input>
+            </td>
+            <td>
+                <el-tag size="mini">项目版本</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.otherField.parentVersion"></el-input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <el-tag size="mini">作者：</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="msg.author"></el-input>
+            </td>
+            <td>
+                <el-tag size="mini">数据库表名</el-tag>
+            </td>
+            <td>
+                <el-input size="mini" v-model="extendField.tableNames"></el-input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <el-tag size="mini">选择生成的文件</el-tag>
+            </td>
+            <td colspan="4">
+                <el-checkbox-group v-model="checkList">
+                    <el-checkbox label="createCode">业务类</el-checkbox>
+                    <el-checkbox label="createConfig">配置类</el-checkbox>
+                    <el-checkbox label="createUIpom">pom文件</el-checkbox>
+                    <el-checkbox label="createBanner">banner文件</el-checkbox>
+                    <el-checkbox label="createMainClass">启动类</el-checkbox>
+                    <el-checkbox label="createApplication">application配置文件</el-checkbox>
+                    <el-checkbox label="createBootstrap">bootstrap配置文件</el-checkbox>
+                    <el-checkbox label="createLogback">logback</el-checkbox>
+                    <el-checkbox label="createReadme">Readme.xml</el-checkbox>
+                </el-checkbox-group>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <el-button @click="generateCode" type="success">生成代码</el-button>
+        <div style="color: #ff0114;font-weight: bold">*{{result}}*</div>
+    </div>
+
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: function () {
+            return {
+                msg: {
+                    otherField: {parentVersion: "1.0-SNAPSHOT"},
+                    author: "user",
+                    driver: "com.mysql.jdbc.Driver",
+                    username: "root",
+                    swagger: true,
+                    tableName: ["xxx"],
+                    parentPack: "com.test.base",
+                    jdbcUrl: "jdbc:mysql:///user?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
+                    suffix: "gener",
+                    password: "root",
+                    module: "test-generator",
+                    projectPackage: "com.test",
+                    excloudCommonds: []
+                },
+                extendField: {
+                    swaggerStr: "true",
+                    tableNames: "多个表用英文逗号隔开"
+                },
+                result: 'waiting',
+                checkList: ['createCode'],
+
+            }
+        },
+        created() {
+            this.loadingData();
+        },
+        methods: {
+            generateCode() {
+                let _this = this;
+                var arr = _this.extendField.tableNames.split(',');
+                _this.msg.tableName = arr;
+                _this.msg.swagger = _this.extendField.swaggerStr;
+                var  allList=["createUIpom", "createCode", "createApplication", "createBootstrap",
+                    "createBanner", "createConfig","createLogback","createMainClass","createReadme"];
+                _this.msg.excloudCommonds= allList.filter(function (val) { return _this.checkList.indexOf(val) === -1 })
+                axios.post('/ponseidon/create', this.msg)
+                    .then(function (response) {
+                        _this.result = response.data.result;
+                    })
+                    .catch(function (error) {
+                    });
+            },
+            loadingData() {
+                let _this = this;
+                axios.get('/ponseidon/message')
+                    .then(function (response) {
+                        if (response.data.otherField.parentVersion==null){
+                            response.data.otherField.parentVersion="1.0-SNAPSHOT";
+                        }
+                        _this.extendField.swaggerStr=_this.msg.swagger.toString();
+                        _this.msg = response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        }
+    })
+</script>
+</body>
+</html>
