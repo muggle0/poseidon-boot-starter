@@ -1,8 +1,7 @@
 server.port=8080
-poseidon.auto=false
-
+poseidon.auto=true
+spring.flyway.enabled=true
 spring.flyway.locations=classpath:sql
-spring.flyway.enabled=false
 spring.application.name=${module}
 spring.profiles.active=local
 

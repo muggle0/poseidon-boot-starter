@@ -16,19 +16,19 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <dependencies>
-        <!-- <dependency>
+         <dependency>
              <groupId>com.muggle</groupId>
              <artifactId>poseidon-boot-starter</artifactId>
-             <version>1.0.0.Beta</version>
-         </dependency> -->
+             <version>1.1.0.SNAPSHOT</version>
+         </dependency>
          <dependency>
              <groupId>org.aspectj</groupId>
              <artifactId>aspectjweaver</artifactId>
          </dependency>
-       <#--  <dependency>
+         <dependency>
              <groupId>org.springframework.boot</groupId>
              <artifactId>spring-boot-starter-security</artifactId>
-         </dependency>-->
+         </dependency>
          <dependency>
              <groupId>org.springframework.boot</groupId>
              <artifactId>spring-boot-starter</artifactId>
@@ -39,11 +39,6 @@
              <groupId>org.springframework.boot</groupId>
              <artifactId>spring-boot-starter-validation</artifactId>
          </dependency>
-         <dependency>
-             <groupId>org.flywaydb</groupId>
-             <artifactId>flyway-core</artifactId>
-         </dependency>
-
          <dependency>
              <groupId>mysql</groupId>
              <artifactId>mysql-connector-java</artifactId>
