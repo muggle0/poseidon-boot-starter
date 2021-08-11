@@ -1,9 +1,13 @@
 package com.muggle.poseidon.adapter;
 
 import com.muggle.poseidon.auto.PoseidonSecurityProperties;
+import com.muggle.poseidon.handler.web.CodeController;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -14,7 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @EnableConfigurationProperties(PoseidonSecurityProperties.class)
-@ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "false", matchIfMissing = false)
+@ConditionalOnMissingBean(PoseidonAuthConfigAdapter.class)
 public class DisableSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -28,6 +32,18 @@ public class DisableSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
             .and()
             .logout()
             .permitAll();
+    }
+
+    @Bean
+    @Profile("local")
+    public CodeController codeController(){
+        return new CodeController();
+    }
+
+    @Bean
+    @Profile("local")
+    public GeneratorWebMvcConfig generatorWebMvcConfig(){
+        return new GeneratorWebMvcConfig();
     }
 
 }

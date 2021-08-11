@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @create: 2020-03-12 09:54
  */
 @RestController
-@ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
 public class WebUrlHandler implements ErrorController {
     @Value("${spring.application.name:poseidon-boot-starter}")
     private String appName;

@@ -1,9 +1,14 @@
 package com.muggle.poseidon.auto;
 
 
+import com.muggle.poseidon.handler.web.WebResultHandler;
+import com.muggle.poseidon.handler.web.WebUrlHandler;
+import com.muggle.poseidon.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 @ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
 @Configuration
-//@ConditionalOnProperty(TokenService.class)
+@ConditionalOnBean(TokenService.class)
 public class ExpansibilityConfig {
 
     /**
@@ -21,5 +26,14 @@ public class ExpansibilityConfig {
      */
     private static final Logger log = LoggerFactory.getLogger(ExpansibilityConfig.class);
 
+    @Bean
+    public WebResultHandler webResultHandler(){
+        return new WebResultHandler();
+    }
+
+    @Bean
+    public WebUrlHandler webUrlHandler(){
+        return new WebUrlHandler();
+    }
 
 }

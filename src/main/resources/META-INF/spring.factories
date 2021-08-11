@@ -1,5 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.muggle.poseidon.auto.ExpansibilityConfig,\
 com.muggle.poseidon.auto.SecurityAutoConfig,\
-com.muggle.poseidon.handler.web.WebUrlHandler,\
-com.muggle.poseidon.handler.web.WebResultHandler
+com.muggle.poseidon.adapter.DisableSecurityConfigAdapter

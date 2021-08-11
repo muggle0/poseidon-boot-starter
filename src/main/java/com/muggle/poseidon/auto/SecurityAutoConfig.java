@@ -49,7 +49,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @Configuration
 @EnableConfigurationProperties(PoseidonSecurityProperties.class)
 @ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
-//@ConditionalOnProperty(TokenService.class)
+@ConditionalOnBean(TokenService.class)
 @SuppressWarnings("ALL")
 public class SecurityAutoConfig {
     private static final Log log = LogFactory.getLog(SecurityAutoConfig.class);
