@@ -55,13 +55,17 @@ public class SecurityAutoConfig {
     private static final Log log = LogFactory.getLog(SecurityAutoConfig.class);
 
     @Autowired
-    PoseidonSecurityProperties properties;
+    private PoseidonSecurityProperties properties;
 
     @Autowired
     private WebApplicationContext applicationContext;
 
     @Autowired(required = false)
-    RequestLogProcessor logProcessor;
+    private RequestLogProcessor logProcessor;
+
+    public SecurityAutoConfig() {
+        log.info("==========> [SecurityAutoConfig start]");
+    }
 
     @Bean
     public PoseidonAuthConfigAdapter getAdapter(TokenService tokenService, SecurityStore securityStore) {

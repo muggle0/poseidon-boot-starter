@@ -1,8 +1,9 @@
 package com.muggle.poseidon.handler.web;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muggle.poseidon.entity.CodeCommand;
-import com.muggle.poseidon.entity.MyUIcodeCommand;
 import com.muggle.poseidon.entity.ProjectMessage;
 import com.muggle.poseidon.entity.ProjectMessageVO;
 import com.muggle.poseidon.factory.CodeCommandInvoker;
@@ -25,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,14 +52,10 @@ public class CodeController {
     public String create(@RequestBody ProjectMessageVO projectMessageVO) {
         try {
             final SimpleCodeGenerator simpleCodeGenerator = new SimpleCodeGenerator(convertMessage(projectMessageVO));
+            initTable(simpleCodeGenerator,projectMessageVO);
             final CodeCommandInvoker invoker = new CodeCommandInvoker(simpleCodeGenerator);
-
-            invoker.popCommond("createPom");
             if (!CollectionUtils.isEmpty(codeCommands)) {
                 codeCommands.forEach(invoker::addCommond);
-            }
-            if (!projectMessageVO.getExcloudCommonds().contains("createUIpom")) {
-                invoker.addCommond(new MyUIcodeCommand());
             }
             projectMessageVO.getExcloudCommonds().forEach(invoker::popCommond);
             invoker.addCommond(new CodeCommand() {
@@ -94,6 +93,37 @@ public class CodeController {
             LOGGER.error(e.getMessage(), e);
             return "{\"result\":\" 生成代码发生错误，错误原因：" + e.getMessage() + "\"}";
         }
+    }
+
+    private void initTable(SimpleCodeGenerator simpleCodeGenerator, ProjectMessageVO projectMessageVO) {
+        if (projectMessageVO.getExcloudCommonds().contains("createTable")){
+            return;
+        }
+        final Connection conn = simpleCodeGenerator.getDataSource().getConn();
+        final DbType dbType = simpleCodeGenerator.getDataSource().getDbType();
+        if (DbType.MYSQL.equals(dbType)){
+            try {
+                final StringBuilder builder = new StringBuilder();
+                builder.append("CREATE TABLE `oa_url_info` (\n" +
+                    "  `id` bigint(20) NOT NULL,\n" +
+                    "  `url` varchar(150) DEFAULT NULL,\n" +
+                    "  `description` varchar(255) DEFAULT NULL COMMENT '描述',\n" +
+                    "  `gmt_create` date DEFAULT NULL COMMENT '创建时间',\n" +
+                    "  `enable` tinyint(1) DEFAULT NULL COMMENT '是否有效',\n" +
+                    "  `request_type` varchar(10) DEFAULT NULL COMMENT '请求类型',\n" +
+                    "  `class_name` varchar(255) DEFAULT NULL COMMENT '类名',\n" +
+                    "  `method_name` varchar(255) DEFAULT NULL COMMENT '方法名',\n" +
+                    "  `parent_id` bigint(20) DEFAULT NULL COMMENT '父行id',\n" +
+                    "  `parent_url` varchar(150) DEFAULT NULL,\n" +
+                    "  PRIMARY KEY (`id`)\n" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                conn.prepareStatement(builder.toString()).execute();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 

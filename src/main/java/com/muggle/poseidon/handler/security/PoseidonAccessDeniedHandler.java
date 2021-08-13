@@ -43,7 +43,6 @@ public class PoseidonAccessDeniedHandler implements AccessDeniedHandler {
                 response.setContentType("application/json;charset=UTF-8");
                 try(PrintWriter writer = response.getWriter();) {
                     writer.write("{\"code\":403,\"message\":\"账号过期\"}");
-                    writer.close();
                     return;
                 }
             }
@@ -51,7 +50,6 @@ public class PoseidonAccessDeniedHandler implements AccessDeniedHandler {
                 response.setContentType("application/json;charset=UTF-8");
                 try ( PrintWriter writer = response.getWriter()){
                     writer.write("{\"code\":403,\"message\":\"账号被锁定\"}");
-                    writer.close();
                     return;
                 }
             } else {
