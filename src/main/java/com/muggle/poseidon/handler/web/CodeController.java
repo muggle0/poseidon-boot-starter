@@ -2,6 +2,10 @@ package com.muggle.poseidon.handler.web;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muggle.poseidon.entity.CodeCommand;
 import com.muggle.poseidon.entity.ProjectMessage;
@@ -28,6 +32,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,8 +57,8 @@ public class CodeController {
     public String create(@RequestBody ProjectMessageVO projectMessageVO) {
         try {
             final SimpleCodeGenerator simpleCodeGenerator = new SimpleCodeGenerator(convertMessage(projectMessageVO));
-            initTable(simpleCodeGenerator,projectMessageVO);
             final CodeCommandInvoker invoker = new CodeCommandInvoker(simpleCodeGenerator);
+            initTable(simpleCodeGenerator,projectMessageVO);
             if (!CollectionUtils.isEmpty(codeCommands)) {
                 codeCommands.forEach(invoker::addCommond);
             }
@@ -99,30 +104,29 @@ public class CodeController {
         if (projectMessageVO.getExcloudCommonds().contains("createTable")){
             return;
         }
-        final Connection conn = simpleCodeGenerator.getDataSource().getConn();
-        final DbType dbType = simpleCodeGenerator.getDataSource().getDbType();
-        if (DbType.MYSQL.equals(dbType)){
-            try {
-                final StringBuilder builder = new StringBuilder();
-                builder.append("CREATE TABLE `oa_url_info` (\n" +
-                    "  `id` bigint(20) NOT NULL,\n" +
-                    "  `url` varchar(150) DEFAULT NULL,\n" +
-                    "  `description` varchar(255) DEFAULT NULL COMMENT '描述',\n" +
-                    "  `gmt_create` date DEFAULT NULL COMMENT '创建时间',\n" +
-                    "  `enable` tinyint(1) DEFAULT NULL COMMENT '是否有效',\n" +
-                    "  `request_type` varchar(10) DEFAULT NULL COMMENT '请求类型',\n" +
-                    "  `class_name` varchar(255) DEFAULT NULL COMMENT '类名',\n" +
-                    "  `method_name` varchar(255) DEFAULT NULL COMMENT '方法名',\n" +
-                    "  `parent_id` bigint(20) DEFAULT NULL COMMENT '父行id',\n" +
-                    "  `parent_url` varchar(150) DEFAULT NULL,\n" +
-                    "  PRIMARY KEY (`id`)\n" +
-                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-                conn.prepareStatement(builder.toString()).execute();
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+
+        final TableInfo tableInfo = new TableInfo();
+        tableInfo.setConvert(true);
+        tableInfo.setEntityName("UrlInfo");
+        final TableField tableField = new TableField();
+        tableField.setColumnName("url").setColumnType(DbColumnType.STRING).setType("varchar(150)")
+            .setName("url").setPropertyName("url").setComment("");
+        tableInfo.setFields(Arrays.asList(tableField));
+        tableInfo.setImportPackages("com.baomidou.mybatisplus.annotation.TableName");
+        tableInfo.setImportPackages("java.time.LocalDate");
+        tableInfo.setImportPackages("com.muggle.poseidon.base.BaseBean");
+        tableInfo.setName("oa_url_info");
+        tableInfo.setComment("");
+        tableInfo.setMapperName("UrlInfoMapper");
+        tableInfo.setXmlName("UrlInfoMapper");
+        tableInfo.setServiceName("IUrlInfoService");
+        tableInfo.setServiceImplName("UrlInfoServiceImpl");
+        tableInfo.setControllerName("UrlInfoController");
+        tableInfo.setHavePrimaryKey(true);
+        tableInfo.setCommonFields(Arrays.asList(tableField));
+        tableInfo.setFieldNames("url, description, gmt_create, enable, request_type, class_name, method_name, parent_id, parent_url");
+        simpleCodeGenerator.getTemplateEngine().getConfigBuilder().getTableInfoList().add(tableInfo);
+
 
     }
 
