@@ -138,4 +138,9 @@ public class CodeController {
         }
         return build;
     }
+
+    public static void main(String[] args) {
+        // 人生若只如初见
+        System.out.println("hello world");
+    }
 }
