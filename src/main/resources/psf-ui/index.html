@@ -111,6 +111,7 @@
                     <el-checkbox label="createBootstrap">bootstrap配置文件</el-checkbox>
                     <el-checkbox label="createLogback">logback</el-checkbox>
                     <el-checkbox label="createReadme">Readme.xml</el-checkbox>
+                    <el-checkbox label="createTable">建表</el-checkbox>
                 </el-checkbox-group>
             </td>
         </tr>
@@ -146,7 +147,8 @@
                     tableNames: "多个表用英文逗号隔开"
                 },
                 result: 'waiting',
-                checkList: ['createCode'],
+                checkList:["createUIpom", "createCode", "createApplication", "createBootstrap",
+                    "createBanner", "createConfig","createLogback","createMainClass","createReadme","createTable"]
 
             }
         },
@@ -160,7 +162,7 @@
                 _this.msg.tableName = arr;
                 _this.msg.swagger = _this.extendField.swaggerStr;
                 var  allList=["createUIpom", "createCode", "createApplication", "createBootstrap",
-                    "createBanner", "createConfig","createLogback","createMainClass","createReadme"];
+                    "createBanner", "createConfig","createLogback","createMainClass","createReadme","createTable"];
                 _this.msg.excloudCommonds= allList.filter(function (val) { return _this.checkList.indexOf(val) === -1 })
                 axios.post('/ponseidon/create', this.msg)
                     .then(function (response) {

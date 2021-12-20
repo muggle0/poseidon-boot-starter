@@ -103,11 +103,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-spring-webmvc-adapter</artifactId>
             <version>1.8.1</version>

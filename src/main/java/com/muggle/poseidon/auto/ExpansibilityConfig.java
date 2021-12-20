@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @ConditionalOnProperty(prefix = "poseidon", name = "auto", havingValue = "true", matchIfMissing = false)
-@Configuration
 @ConditionalOnBean(TokenService.class)
+@Configuration
 public class ExpansibilityConfig {
 
     /**

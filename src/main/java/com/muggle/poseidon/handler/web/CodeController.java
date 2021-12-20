@@ -1,8 +1,13 @@
 package com.muggle.poseidon.handler.web;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muggle.poseidon.entity.CodeCommand;
-import com.muggle.poseidon.entity.MyUIcodeCommand;
 import com.muggle.poseidon.entity.ProjectMessage;
 import com.muggle.poseidon.entity.ProjectMessageVO;
 import com.muggle.poseidon.factory.CodeCommandInvoker;
@@ -25,6 +30,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,13 +58,9 @@ public class CodeController {
         try {
             final SimpleCodeGenerator simpleCodeGenerator = new SimpleCodeGenerator(convertMessage(projectMessageVO));
             final CodeCommandInvoker invoker = new CodeCommandInvoker(simpleCodeGenerator);
-
-            invoker.popCommond("createPom");
+            initTable(simpleCodeGenerator,projectMessageVO);
             if (!CollectionUtils.isEmpty(codeCommands)) {
                 codeCommands.forEach(invoker::addCommond);
-            }
-            if (!projectMessageVO.getExcloudCommonds().contains("createUIpom")) {
-                invoker.addCommond(new MyUIcodeCommand());
             }
             projectMessageVO.getExcloudCommonds().forEach(invoker::popCommond);
             invoker.addCommond(new CodeCommand() {
@@ -94,6 +98,36 @@ public class CodeController {
             LOGGER.error(e.getMessage(), e);
             return "{\"result\":\" 生成代码发生错误，错误原因：" + e.getMessage() + "\"}";
         }
+    }
+
+    private void initTable(SimpleCodeGenerator simpleCodeGenerator, ProjectMessageVO projectMessageVO) {
+        if (projectMessageVO.getExcloudCommonds().contains("createTable")){
+            return;
+        }
+
+        final TableInfo tableInfo = new TableInfo();
+        tableInfo.setConvert(true);
+        tableInfo.setEntityName("UrlInfo");
+        final TableField tableField = new TableField();
+        tableField.setColumnName("url").setColumnType(DbColumnType.STRING).setType("varchar(150)")
+            .setName("url").setPropertyName("url").setComment("");
+        tableInfo.setFields(Arrays.asList(tableField));
+        tableInfo.setImportPackages("com.baomidou.mybatisplus.annotation.TableName");
+        tableInfo.setImportPackages("java.time.LocalDate");
+        tableInfo.setImportPackages("com.muggle.poseidon.base.BaseBean");
+        tableInfo.setName("oa_url_info");
+        tableInfo.setComment("");
+        tableInfo.setMapperName("UrlInfoMapper");
+        tableInfo.setXmlName("UrlInfoMapper");
+        tableInfo.setServiceName("IUrlInfoService");
+        tableInfo.setServiceImplName("UrlInfoServiceImpl");
+        tableInfo.setControllerName("UrlInfoController");
+        tableInfo.setHavePrimaryKey(true);
+        tableInfo.setCommonFields(Arrays.asList(tableField));
+        tableInfo.setFieldNames("url, description, gmt_create, enable, request_type, class_name, method_name, parent_id, parent_url");
+        simpleCodeGenerator.getTemplateEngine().getConfigBuilder().getTableInfoList().add(tableInfo);
+
+
     }
 
 
