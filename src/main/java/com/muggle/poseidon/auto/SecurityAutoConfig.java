@@ -65,7 +65,7 @@ public class SecurityAutoConfig {
 
     @Bean
     public PoseidonAuthConfigAdapter getAdapter(TokenService tokenService, SecurityStore securityStore) {
-        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 开启自动化配置 <<<<<<<<<<<<<<<<<<<<<");
+        log.info(">>>>>>>>>>>>>>>>>>>>>>> 开启自动化配置 <<<<<<<<<<<<<<<<<<<<<");
         if (securityStore == null) {
             throw new SimplePoseidonException("请先注册 securityStore");
         }
@@ -88,7 +88,7 @@ public class SecurityAutoConfig {
                 if (property==null){
                     throw new SimplePoseidonException(">>>>>>>>>>>>>>>>>>>>>>> application-log.dir 未配置 <<<<<<<<<<<<<<<<<<<<<");
                 }
-                log.debug(">>>>>>>>>>>>>>>>>>>>>>> 权限系统开机任务执行 <<<<<<<<<<<<<<<<<<<<<");
+                log.info(">>>>>>>>>>>>>>>>>>>>>>> 权限系统开机任务执行 <<<<<<<<<<<<<<<<<<<<<");
                 List<AuthUrlPathDO> allURL = getAllURL();
                 tokenService.processUrl(allURL);
             }
@@ -159,7 +159,7 @@ public class SecurityAutoConfig {
     @Autowired
     @ConditionalOnBean(DistributedLocker.class)
     public RequestAspect getLogAspect(DistributedLocker distributedLocker) {
-        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
+        log.info(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
         return new RequestAspect(distributedLocker, logProcessor);
     }
 
@@ -170,7 +170,7 @@ public class SecurityAutoConfig {
         return new WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>() {
             @Override
             public void customize(ConfigurableServletWebServerFactory factory) {
-                log.debug(">>>>>>>>>>>>>>>>>>>>>>> 错误页面配置——404（/public/notfound） 500（/error_message） <<<<<<<<<<<<<<<<<<<<<");
+                log.info(">>>>>>>>>>>>>>>>>>>>>>> 错误页面配置——404（/public/notfound） 500（/error_message） <<<<<<<<<<<<<<<<<<<<<");
                 factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/public/notfound"), new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error_message"));
             }
         };

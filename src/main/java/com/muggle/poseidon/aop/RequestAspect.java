@@ -38,6 +38,7 @@ public class RequestAspect {
     public RequestAspect(DistributedLocker locker, RequestLogProcessor logProcessor) {
         this.logProcessor = logProcessor;
         this.locker = locker;
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>[请求日志切面初始化]<<<<<<<<<<<<<<<<<<<<<");
     }
 
     private static final Log log = LogFactory.getLog(RequestAspect.class);
