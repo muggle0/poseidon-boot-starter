@@ -34,6 +34,7 @@ public class EditLockAspect {
     public EditLockAspect(DistributedLocker locker, ApplicationContext applicationContext) {
         this.locker = locker;
         this.applicationContext = applicationContext;
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>[编辑锁初始化]<<<<<<<<<<<<<<<<<<<<<");
     }
 
     @Pointcut("@annotation(com.muggle.poseidon.annotation.EditLock)")
