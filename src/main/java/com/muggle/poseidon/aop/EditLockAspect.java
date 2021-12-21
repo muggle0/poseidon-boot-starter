@@ -3,8 +3,6 @@ package com.muggle.poseidon.aop;
 import com.muggle.poseidon.annotation.EditLock;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.EditLockException;
-import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
-import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
