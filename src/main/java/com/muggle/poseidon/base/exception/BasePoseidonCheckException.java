@@ -20,4 +20,8 @@ public abstract class BasePoseidonCheckException extends Exception {
         super(e);
     }
 
+    public BasePoseidonCheckException(String message,Throwable e){
+        super(message,e);
+    }
+
 }
