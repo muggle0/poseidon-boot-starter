@@ -3,8 +3,6 @@ package com.muggle.poseidon.aop;
 import com.muggle.poseidon.annotation.EditLock;
 import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.EditLockException;
-import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
-import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
@@ -34,6 +32,7 @@ public class EditLockAspect {
     public EditLockAspect(DistributedLocker locker, ApplicationContext applicationContext) {
         this.locker = locker;
         this.applicationContext = applicationContext;
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>[编辑锁初始化]<<<<<<<<<<<<<<<<<<<<<");
     }
 
     @Pointcut("@annotation(com.muggle.poseidon.annotation.EditLock)")

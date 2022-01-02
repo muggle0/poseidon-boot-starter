@@ -44,7 +44,6 @@ public class PoseidonLogoutSuccessHandler implements LogoutSuccessHandler {
             if (success) {
                 log.info("用户登出, token: {}", principal);
                 writer.write("{\"code\":200,\"message\":\"登出成功\"}");
-                writer.close();
             } else {
                 log.info("用户登出失败 token：{}", principal);
                 writer.write("{\"code\":5001,\"message\":\"登出失败，请重试\"}");
