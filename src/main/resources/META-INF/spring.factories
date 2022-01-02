@@ -1,4 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.muggle.poseidon.auto.ExpansibilityConfig,\
-com.muggle.poseidon.auto.SecurityAutoConfig,\
-com.muggle.poseidon.adapter.DisableSecurityConfigAdapter
+com.muggle.poseidon.auto.SecurityAutoConfig

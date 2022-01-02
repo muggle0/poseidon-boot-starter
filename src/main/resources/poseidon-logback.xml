@@ -8,14 +8,14 @@
     <!--日志文件 最大保存天数-->
     <property name="maxHistory" value="180" />
     <!--日志文件路径-->
-    <springProperty scope="context" name="log_dir" source="log.dir"/>
+    <springProperty scope="context" name="log_dir" source="log.dir" defaultValue="logs" />
 
     <!--控制台日志配置-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
                 <pattern>
-                    %white(POSEIDON----) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %cyan(%logger) - %msg%n
+                    %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %cyan(%logger) - %msg%n
                 </pattern>
             </pattern>
         </encoder>

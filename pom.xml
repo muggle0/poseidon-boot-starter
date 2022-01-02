@@ -74,14 +74,8 @@
             <version>5.1.2</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>5.3.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>5.3.5.RELEASE</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <!--接入流控-->
@@ -131,17 +125,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>rdc-releases</id>
-            <url>https://repo.rdc.aliyun.com/repository/135664-release-agaluw/</url>
-        </repository>
-        <snapshotRepository>
-            <id>rdc-snapshots</id>
-            <url>https://repo.rdc.aliyun.com/repository/135664-snapshot-iPvOFe/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
         <defaultGoal>compile</defaultGoal>

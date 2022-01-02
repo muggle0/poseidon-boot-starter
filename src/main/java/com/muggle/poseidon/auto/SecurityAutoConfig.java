@@ -1,16 +1,8 @@
 package com.muggle.poseidon.auto;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.muggle.poseidon.adapter.PoseidonAuthConfigAdapter;
-import com.muggle.poseidon.aop.RequestAspect;
-import com.muggle.poseidon.base.DistributedLocker;
 import com.muggle.poseidon.base.exception.SimplePoseidonException;
 import com.muggle.poseidon.entity.AuthUrlPathDO;
-import com.muggle.poseidon.handler.security.RequestLogProcessor;
 import com.muggle.poseidon.service.TokenService;
 import com.muggle.poseidon.store.SecurityStore;
 import io.swagger.annotations.Api;
@@ -22,14 +14,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.server.ErrorPage;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
@@ -38,6 +26,11 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: poseidon-cloud-starter
@@ -60,8 +53,6 @@ public class SecurityAutoConfig {
     @Autowired
     private WebApplicationContext applicationContext;
 
-    @Autowired(required = false)
-    private RequestLogProcessor logProcessor;
 
     public SecurityAutoConfig() {
         log.info("==========> [SecurityAutoConfig start]");
@@ -159,24 +150,4 @@ public class SecurityAutoConfig {
         return resultList;
     }
 
-    @Bean
-    @Autowired
-    @ConditionalOnBean(DistributedLocker.class)
-    public RequestAspect getLogAspect(DistributedLocker distributedLocker) {
-        log.debug(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
-        return new RequestAspect(distributedLocker, logProcessor);
-    }
-
-
-    //    配置错误页面
-    @Bean
-    public WebServerFactoryCustomizer containerCustomizer() {
-        return new WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>() {
-            @Override
-            public void customize(ConfigurableServletWebServerFactory factory) {
-                log.debug(">>>>>>>>>>>>>>>>>>>>>>> 错误页面配置——404（/public/notfound） 500（/error_message） <<<<<<<<<<<<<<<<<<<<<");
-                factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/public/notfound"), new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error_message"));
-            }
-        };
-    }
 }

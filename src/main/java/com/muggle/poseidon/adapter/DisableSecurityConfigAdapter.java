@@ -1,5 +1,6 @@
 package com.muggle.poseidon.adapter;
 
+import com.muggle.poseidon.auto.SecurityAutoConfig;
 import com.muggle.poseidon.handler.web.CodeController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * Created by muggle
  */
 @Configuration
-@ConditionalOnMissingBean(PoseidonAuthConfigAdapter.class)
+@ConditionalOnMissingBean(SecurityAutoConfig.class)
 public class DisableSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(DisableSecurityConfigAdapter.class);
 
@@ -26,8 +27,7 @@ public class DisableSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf()
+        http.csrf()
             .disable()
             .authorizeRequests()
             .anyRequest()
