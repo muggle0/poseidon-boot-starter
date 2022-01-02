@@ -88,10 +88,6 @@ public class SecurityAutoConfig {
         return new CommandLineRunner() {
             @Override
             public void run(String... strings) throws Exception {
-                String property = context.getEnvironment().getProperty("log.dir");
-                if (property==null){
-                    throw new SimplePoseidonException(">>>>>>>>>>>>>>>>>>>>>>> application-log.dir 未配置 <<<<<<<<<<<<<<<<<<<<<");
-                }
                 log.info(">>>>>>>>>>>>>>>>>>>>>>> 权限系统开机任务执行 <<<<<<<<<<<<<<<<<<<<<");
                 List<AuthUrlPathDO> allURL = getAllURL();
                 tokenService.processUrl(allURL);
@@ -157,26 +153,5 @@ public class SecurityAutoConfig {
             resultList.add(authUrlPathDO);
         }
         return resultList;
-    }
-
-    @Bean
-    @Autowired
-    @ConditionalOnBean(DistributedLocker.class)
-    public RequestAspect getLogAspect(DistributedLocker distributedLocker) {
-        log.info(">>>>>>>>>>>>>>>>>>>>>>> 日志切面注册 <<<<<<<<<<<<<<<<<<<<<");
-        return new RequestAspect(distributedLocker, logProcessor);
-    }
-
-
-    //    配置错误页面
-    @Bean
-    public WebServerFactoryCustomizer containerCustomizer() {
-        return new WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>() {
-            @Override
-            public void customize(ConfigurableServletWebServerFactory factory) {
-                log.info(">>>>>>>>>>>>>>>>>>>>>>> 错误页面配置——404（/public/notfound） 500（/error_message） <<<<<<<<<<<<<<<<<<<<<");
-                factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/public/notfound"), new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error_message"));
-            }
-        };
     }
 }
