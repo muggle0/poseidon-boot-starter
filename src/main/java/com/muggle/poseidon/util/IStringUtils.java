@@ -10,7 +10,7 @@ import java.util.Random;
  * @Date: 2020/6/5
  **/
 public class IStringUtils extends StringUtils {
-    static final String charStr = "0123456789abcdefghijklmnopqrstuvwxyz";
+    static final String charStr = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public static String getCode(int length) {
         Random random = new Random();

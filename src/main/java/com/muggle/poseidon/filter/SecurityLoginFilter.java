@@ -42,6 +42,7 @@ public class SecurityLoginFilter extends UsernamePasswordAuthenticationFilter {
             String token = securityStore.signUserMessage(login);
             return new UsernamePasswordAuthenticationToken(token, "");
         } catch (SimplePoseidonCheckException e) {
+            logger.error("SimplePoseidonCheckException：", e);
             throw new AuthenticationServiceException(e.getMessage());
         } catch (Exception e) {
             logger.error("系统异常：", e);

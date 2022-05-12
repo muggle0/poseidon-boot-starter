@@ -328,10 +328,10 @@ public class DateUtils {
         return simpleDateFormat.format(date);
     }
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         String s = stampToDate("1502964348398");
         System.out.println(s);
-    }
+    }*/
 }
 
 

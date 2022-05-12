@@ -50,13 +50,13 @@ public class ThreadPoolUtils {
         return executor;
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         ThreadPoolExecutor threadPoolExecutor = ThreadPoolUtils.buildDefaultPool();
         threadPoolExecutor.execute(()->{
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>.");
         });
         threadPoolExecutor.shutdown();
-    }
+    }*/
 
 
 }

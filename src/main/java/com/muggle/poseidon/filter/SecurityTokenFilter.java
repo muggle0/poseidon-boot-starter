@@ -91,7 +91,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
         }
 
         if (userDetails == null) {
-            log.error("该用户不存在， token:{}", token);
+            log.error("token:{}", token);
             SecurityContextHolder.getContext().setAuthentication(getBadToken("该用户不存在，请重新登录"));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;

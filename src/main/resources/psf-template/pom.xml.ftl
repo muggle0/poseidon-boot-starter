@@ -47,6 +47,10 @@
              <artifactId>pagehelper</artifactId>
              <version>5.1.11</version>
          </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
          <dependency>
              <groupId>com.alibaba</groupId>
              <artifactId>druid</artifactId>

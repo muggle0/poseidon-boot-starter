@@ -74,6 +74,8 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(paths);
         SecurityStore.ACCESS_PATHS.add("/error_message");
         SecurityStore.ACCESS_PATHS.add("/");
+        SecurityStore.ACCESS_PATHS.add(SecurityMessageProperties.LOGIN_URL);
+        SecurityStore.ACCESS_PATHS.add(SecurityMessageProperties.LOGOUT);
         SecurityStore.ACCESS_PATHS.add("/public/notfound");
 //        log.debug("》》》》 初始化security 放行静态资源：{}" + "/**/*.bmp /**/*.png /**/*.gif /**/*.jpg /**/*.ico /**/*.js");
     }

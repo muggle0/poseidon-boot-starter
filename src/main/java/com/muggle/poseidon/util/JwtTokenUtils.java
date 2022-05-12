@@ -115,7 +115,7 @@ public class JwtTokenUtils {
         return compact;
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
 //
         Map<String, Object> body = new HashMap<>();
         body.put("username", "muggle");
@@ -123,7 +123,7 @@ public class JwtTokenUtils {
         body.put("roles", Arrays.asList("admin", "guest"));
         String test = createToken(body, "test");
         System.out.println(test);
-    }
+    }*/
 }
 /**
  * token使用思路

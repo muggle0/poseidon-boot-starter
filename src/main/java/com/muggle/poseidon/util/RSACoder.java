@@ -177,7 +177,7 @@ public class RSACoder {
         return key.getEncoded();
     }
 
-    public static void main(String[] args) throws Exception {
+   /* public static void main(String[] args) throws Exception {
         //初始化密钥
         //生成密钥对
         Map<String, Object> keyMap = RSACoder.initKey();
@@ -207,7 +207,7 @@ public class RSACoder {
 
         System.out.println(new String(dexx));
 
-       /* str = "乙方向甲方发送数据RSA算法";
+       *//* str = "乙方向甲方发送数据RSA算法";
 
         //乙方使用公钥对数据进行加密
         byte[] code2 = RSACoder.encryptByPublicKey(str.getBytes(), publicKey);
@@ -215,7 +215,7 @@ public class RSACoder {
         //甲方使用私钥对数据进行解密
         byte[] decode2 = RSACoder.decryptByPrivateKey(code2, privateKey);
 
-        System.out.println("甲方解密后的数据：" + new String(decode2));*/
-    }
+        System.out.println("甲方解密后的数据：" + new String(decode2));*//*
+    }*/
 
 }

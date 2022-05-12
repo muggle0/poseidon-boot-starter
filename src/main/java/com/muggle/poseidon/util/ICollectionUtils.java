@@ -20,11 +20,11 @@ public class ICollectionUtils extends CollectionUtils {
      * 寻求优化空间 如自定义map  自定义list
      * @param args
      */
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         Map<String, String> map=new HashMap<>();
         List<String> list=new ArrayList<>();
         List<String> collect = map.values().stream().collect(Collectors.toList());
         Map<String, String> collect1 = list.stream().collect(Collectors.toMap(key -> key, value -> value, (k1, k2) -> k2));
-    }
+    }*/
 
 }

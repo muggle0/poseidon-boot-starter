@@ -6,13 +6,16 @@ import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muggle.poseidon.entity.CodeCommand;
 import com.muggle.poseidon.entity.ProjectMessage;
 import com.muggle.poseidon.entity.ProjectMessageVO;
 import com.muggle.poseidon.factory.CodeCommandInvoker;
+import com.muggle.poseidon.factory.CodeFactory;
 import com.muggle.poseidon.genera.CodeGenerator;
 import com.muggle.poseidon.genera.SimpleCodeGenerator;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -126,8 +130,6 @@ public class CodeController {
         tableInfo.setCommonFields(Arrays.asList(tableField));
         tableInfo.setFieldNames("url, description, gmt_create, enable, request_type, class_name, method_name, parent_id, parent_url");
         simpleCodeGenerator.getTemplateEngine().getConfigBuilder().getTableInfoList().add(tableInfo);
-
-
     }
 
 
@@ -173,8 +175,46 @@ public class CodeController {
         return build;
     }
 
-    public static void main(String[] args) {
-        // 人生若只如初见
-        System.out.println("hello world");
+    private static class flywayCodeCommand implements CodeCommand{
+
+        @Override
+        public String getName() {
+            return "creatFlyway";
+        }
+
+        @Override
+        public void excute(CodeGenerator codeGenerator) throws Exception {
+            ProjectMessage projectMessage = codeGenerator.getMessage();
+            AbstractTemplateEngine freemarkerTemplateEngine = codeGenerator.getTemplateEngine();
+            StringBuilder path = new StringBuilder();
+            path.append(System.getProperty("user.dir")).append("/");
+            if (!StringUtils.isEmpty(projectMessage.getModule())) {
+                path.append(projectMessage.getModule()).append("/");
+            }
+
+            path.append("/src/main/resources").append("/").append("sql/V1.0.0__create_poseidon.sql");
+            File logback = new File(path.toString());
+            if (!logback.exists() && !logback.getParentFile().exists()) {
+                logback.getParentFile().mkdirs();
+            }
+
+            freemarkerTemplateEngine.writer(converMessage(projectMessage), "/psf-template/V1.0.0__create_poseidon.sql.ftl", path.toString());
+            LOGGER.info("生成 V1.0.0__create_poseidon.sql 》》》》》》》》》》》》");
+        }
+
+        private static Map<String, Object> converMessage(ProjectMessage projectMessage) throws IllegalAccessException {
+            Map<String, Object> map = new HashMap();
+            Class<?> clazz = projectMessage.getClass();
+            Field[] var3 = clazz.getDeclaredFields();
+            int var4 = var3.length;
+            for(int var5 = 0; var5 < var4; ++var5) {
+                Field field = var3[var5];
+                field.setAccessible(true);
+                String fieldName = field.getName();
+                Object value = field.get(projectMessage);
+                map.put(fieldName, value);
+            }
+            return map;
+        }
     }
 }
