@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <servers>
+        <server>
+            <id>muggle0-poseidon-real</id>
+            <username>${env.CODING_MAVEN_REG_USERNAME}</username>
+            <password>${env.CODING_MAVEN_REG_PASSWORD}</password>
+        </server>
+    </servers>
+    <profiles>
+        <profile>
+            <id>a1</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>http://repo1.maven.org/maven2/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>muggle0-poseidon-real</id>
+                    <name>real</name>
+                    <url>https://muggle0-maven.pkg.coding.net/repository/poseidon/real/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <url>https://maven.aliyun.com/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>a1</activeProfile>
+    </activeProfiles>
+    <mirrors>
+        <mirror>
+            <id>aliyunmaven</id>
+            <mirrorOf>central</mirrorOf>
+            <name>aliyun maven</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </mirror>
+        <mirror>
+            <id>nexus-tencentyun</id>
+            <!-- 此配置避免了本仓库制品的拉取流量被切换到腾讯云镜像源，保证您在使用镜像加速的同时可以从本仓库拉取制品 -->
+            <mirrorOf>!muggle0-poseidon-real</mirrorOf>
+            <name>Nexus tencentyun</name>
+            <url>http://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+        </mirror>
+    </mirrors>
+
+</settings>
