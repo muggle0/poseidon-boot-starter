@@ -10,8 +10,6 @@
     <description>poseidon 项目starter 包</description>
 
     <properties>
-        <java.version>1.8</java.version>
-        <security.version>5.1.5.RELEASE</security.version>
         <logstash.version>5.3</logstash.version>
         <jjwt.version>0.7.0</jjwt.version>
         <swagger2.version>2.8.0</swagger2.version>
@@ -37,9 +35,9 @@
             <artifactId>spring-webmvc</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -79,12 +77,10 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>5.3.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>5.3.5.RELEASE</version>
         </dependency>
     </dependencies>
 
@@ -94,7 +90,7 @@
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.0.6.RELEASE</version>
+                <version>3.1.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -103,25 +99,25 @@
 
     <distributionManagement>
         <repository>
-            <id>rdc-releases</id>
-            <url>https://repo.rdc.aliyun.com/repository/135664-release-agaluw/</url>
+            <id>muggle0-poseidon-real</id>
+            <name>real</name>
+            <url>https://muggle0-maven.pkg.coding.net/repository/poseidon/real/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
-        <snapshotRepository>
-            <id>rdc-snapshots</id>
-            <url>https://repo.rdc.aliyun.com/repository/135664-snapshot-iPvOFe/</url>
-        </snapshotRepository>
     </distributionManagement>
 
+
     <build>
-        <defaultGoal>compile</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
+                <version>3.11.0</version>
             </plugin>
         </plugins>
     </build>

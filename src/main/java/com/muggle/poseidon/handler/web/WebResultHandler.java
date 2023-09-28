@@ -1,6 +1,6 @@
 package com.muggle.poseidon.handler.web;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.muggle.poseidon.base.ResultBean;
 import com.muggle.poseidon.base.exception.BasePoseidonCheckException;

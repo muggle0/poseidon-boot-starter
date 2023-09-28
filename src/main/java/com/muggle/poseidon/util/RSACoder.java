@@ -9,7 +9,7 @@ package com.muggle.poseidon.util;
  **/
 
 
-import javax.crypto.Cipher;
+import jakarta.crypto.Cipher;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;

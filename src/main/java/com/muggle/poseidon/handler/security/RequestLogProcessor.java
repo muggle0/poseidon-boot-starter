@@ -1,6 +1,6 @@
 package com.muggle.poseidon.handler.security;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface RequestLogProcessor {
     /**

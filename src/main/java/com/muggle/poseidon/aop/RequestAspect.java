@@ -1,6 +1,6 @@
 package com.muggle.poseidon.aop;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.muggle.poseidon.annotation.InterfaceAction;
 import com.muggle.poseidon.base.DistributedLocker;

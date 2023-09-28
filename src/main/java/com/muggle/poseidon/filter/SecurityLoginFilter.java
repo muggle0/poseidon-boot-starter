@@ -1,7 +1,7 @@
 package com.muggle.poseidon.filter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.muggle.poseidon.base.exception.SimplePoseidonCheckException;
 import com.muggle.poseidon.service.TokenService;

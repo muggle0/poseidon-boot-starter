@@ -1,6 +1,6 @@
 package com.muggle.poseidon.manager;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 import org.springframework.security.access.ConfigAttribute;
