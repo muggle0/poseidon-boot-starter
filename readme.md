@@ -434,11 +434,7 @@ com.username.lestener.ExceptionListener
 
 
 ## 交流
-
-框架涉及到的知识点可以上 [muggle-book](https://muggle-book.gitee.io/) 去查找，对于框架使用过程中遇到的问题或者bug 可以加作者微信反馈：
-
-微信: b3duZXJhbmRzZWxm（base64解码后便是）
+微信号：muggle_wx
 
 喜欢的朋友 starter 一下吧，撸码不容易
 
-## 感谢JetBrains给我白嫖的机会，大家要用正版idea哦
