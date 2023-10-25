@@ -1,9 +1,9 @@
 package com.muggle.poseidon.adapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.muggle.poseidon.auto.PoseidonSecurityProperties;
 import com.muggle.poseidon.filter.SecurityLoginFilter;
 import com.muggle.poseidon.filter.SecurityTokenFilter;
@@ -21,12 +21,15 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.UnanimousBased;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -37,8 +40,8 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
  * @author: muggle
  * @create: 2019-11-04
  **/
-
-public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class PoseidonAuthConfigAdapter {
     private static final Log log = LogFactory.getLog(PoseidonAuthConfigAdapter.class);
     private TokenService tokenService;
     private SecurityStore securityStore;
@@ -50,19 +53,10 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
         this.properties = properties;
     }
 
-    public PoseidonAuthConfigAdapter(boolean disableDefaults, TokenService tokenService, SecurityStore securityStore) {
-        super(disableDefaults);
-        this.tokenService = tokenService;
-        this.securityStore = securityStore;
-    }
 
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
-    }
 
-    @Override
+
     public void configure(WebSecurity web) throws Exception {
 
 //        String [] paths={"/**/*.bmp", "/**/*.gif", "/**/*.png", "/**/*.jpg", "/**/*.ico","/**/*.html","/**/*.css","/**/*.js"};
@@ -78,8 +72,7 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
 //        log.debug("》》》》 初始化security 放行静态资源：{}" + "/**/*.bmp /**/*.png /**/*.gif /**/*.jpg /**/*.ico /**/*.js");
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    public DefaultSecurityFilterChain configure(HttpSecurity http) throws Exception {
         log.info(">>>>>>>>>>>>>>>>>>>>> 启动security配置 <<<<<<<<<<<<<<<<<<<< ");
 
         List<String> ignorePath = properties.getIgnorePath();
@@ -91,16 +84,27 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
         String[] paths = new String[ignorePath.size()];
         ignorePath.toArray(paths);
         SecurityStore.saveAccessPath(ignorePath);
-        http.authorizeRequests().antMatchers(paths).permitAll()
-                .antMatchers("/admin/oauth/**").hasRole("admin")
+        http.authorizeRequests().requestMatchers(paths).permitAll()
+                .requestMatchers("/admin/oauth/**").hasRole("admin")
                 .anyRequest().authenticated().accessDecisionManager(accessDecisionManager())
-                .and().csrf().disable();
-        http.formLogin().usernameParameter("username").passwordParameter("password").loginPage("/public/login.html").loginProcessingUrl(SecurityMessageProperties.LOGIN_URL).permitAll();
+                .and().csrf(new Customizer<CsrfConfigurer<HttpSecurity>>() {
+                    @Override
+                    public void customize(CsrfConfigurer<HttpSecurity> httpSecurityCsrfConfigurer) {
+
+                    }
+                });
+        http.formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>() {
+            @Override
+            public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
+
+            }
+        });
         http.addFilterBefore(poseidonTokenFilter(), LogoutFilter.class);
         http.exceptionHandling().authenticationEntryPoint(loginUrlAuthenticationEntryPoint()).accessDeniedHandler(new PoseidonAccessDeniedHandler());
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
         http.addFilterAt(getLoginFilter(), UsernamePasswordAuthenticationFilter.class);
         http.logout().logoutUrl(SecurityMessageProperties.LOGOUT).logoutSuccessHandler(getLogoutSuccessHandler()).permitAll();
+        return http.build();
     }
 
 
@@ -112,9 +116,8 @@ public class PoseidonAuthConfigAdapter extends WebSecurityConfigurerAdapter {
      * @date 2019/11/6 8:38
      */
     private AccessDecisionManager accessDecisionManager() {
-        List<AccessDecisionVoter<? extends Object>> decisionVoters
-                = Arrays.asList(
-                new PoseidonWebExpressionVoter(tokenService, properties));
+        List<AccessDecisionVoter<?>> decisionVoters = Lists.newArrayList(((AccessDecisionVoter<?>)
+                new PoseidonWebExpressionVoter(tokenService, properties)));
         return new UnanimousBased(decisionVoters);
 
     }
